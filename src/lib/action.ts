@@ -1,33 +1,34 @@
 
-
-import { memberSchema } from "@/components/studentForm";
+"use server"
+import { memberSchema } from "@/components/forms/studentForm";
 import { z } from "zod";
 import prisma from "./prisma";
 import { AdminSchema, adminSchema } from "./schemas";
-import { PrismaClient } from '@prisma/client';
+import { Plan, planSchema } from '@/lib/schemas';
+
 
 
 
 export async function createMember({data}: {data: z.infer<typeof memberSchema>}) {
-    const prisma = new PrismaClient();
+    
   try {
     // Validate the data using zod schema
-    const validatedData = memberSchema.parse(data);
+    
 
     // Insert the validated data into the database using Prisma
     const newMember = await prisma.member.create({
       data: {
-        id: validatedData.id,
-        name: validatedData.name,
-        address: validatedData.address,
-        contactNumber: validatedData.contactNumber,
-        email: validatedData.email,
-        addmissionDate: validatedData.addmissionDate,
-        expiryDate: validatedData.expiryDate,
-        status: validatedData.status,
-        seatNumber: validatedData.seatNumber,
-        profileImage: validatedData.profileImage,
-        planId: validatedData.planId,
+        
+        name: data.name,
+        address: data.address,
+        contactNumber: data.contactNumber,
+        email: data.email,
+        addmissionDate: data.addmissionDate,
+        expiryDate: data.expiryDate,
+        status: data.status,
+        seatNumber: data.seatNumber,
+        profileImage: data.profileImage,
+        planId: data.planId
       },
     });
 
@@ -40,7 +41,7 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
 
 
 export async function createAdmin({data}: {data: z.infer<typeof adminSchema>}) {
-    const prisma = new PrismaClient();
+    
   try {
     // Validate the data using zod schema
     const validatedData = adminSchema.parse(data);
@@ -61,3 +62,36 @@ export async function createAdmin({data}: {data: z.infer<typeof adminSchema>}) {
     throw error;
   }
     }
+
+
+export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
+  try {
+    const plan = await prisma.plan.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        duration: data.duration,
+        amount: data.amount
+      }
+    });
+    console.log(plan);
+    return plan
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+export async function getAllPlans() {
+  try {
+    const plans = await prisma.plan.findMany();
+    console.log('Fetched plans:', plans);
+    return plans
+    
+  } catch (error) {
+    console.error('Error fetching plans:', error);
+    throw new Error('Failed to fetch plans');
+  }
+}
+

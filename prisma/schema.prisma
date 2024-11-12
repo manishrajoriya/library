@@ -53,10 +53,10 @@ model FeeCollection {
   id          Int       @id @default(autoincrement())
   member      Member    @relation(fields: [memberId], references: [id])
   memberId    Int
-  amountPaid  Float
-  totalAmount Float
-  dueAmount   Float
-  dueDate     DateTime
+  amountPaid  Float?
+  totalAmount Float?
+  dueAmount   Float?
+  dueDate     DateTime?
   status      FeeStatus @default(PENDING)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -111,4 +111,21 @@ enum FeeStatus {
 enum AttendanceStatus {
   PRESENT
   ABSENT
+}
+
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean @default(false)
+  author    User?   @relation(fields: [authorId], references: [id])
+  authorId  Int?
 }
