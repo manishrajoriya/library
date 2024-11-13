@@ -2,7 +2,8 @@ import React from 'react'
 import { getAllPlans } from '@/lib/action';
 
 
-export default async function getAllPlan() {
+
+export default async function plans() {
  const plans  = await getAllPlans();
   
     // const plan = await prisma.plan.findMany();
@@ -11,6 +12,9 @@ export default async function getAllPlan() {
  
   return (
     <div>
+      <div>
+        
+      </div>
         {plans.map((plan) => (
             <div>
                 <ol>

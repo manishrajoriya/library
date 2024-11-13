@@ -16,11 +16,11 @@ export async function getServerSideProps() {
 
 
 
-export default function MemberPage({ plans }) {
+export default function MemberPage() {
   return (
     <div>
       <h1>Register Member</h1>
-      <MemberForm plans={plans} /> {/* Pass plans as a prop to MemberForm */}
+      <MemberForm  /> {/* Pass plans as a prop to MemberForm */}
     </div>
   );
 }

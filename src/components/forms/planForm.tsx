@@ -57,10 +57,10 @@ function PlanForm() {
         <label className="block text-sm font-medium text-gray-700">Amount</label>
         <input
           type="number"
-          step="0.01"
+          step="100"
           {...register('amount', { valueAsNumber: true })}
           className="input"
-          placeholder="Amount in USD"
+          placeholder="Amount"
         />
         {errors.amount && <p className="text-red-500">{errors.amount.message}</p>}
       </div>

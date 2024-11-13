@@ -5,6 +5,7 @@ import { z } from "zod";
 import prisma from "./prisma";
 import { AdminSchema, adminSchema } from "./schemas";
 import { Plan, planSchema } from '@/lib/schemas';
+import exp from "constants";
 
 
 
@@ -28,8 +29,10 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
         status: data.status,
         seatNumber: data.seatNumber,
         profileImage: data.profileImage,
-        planId: data.planId
+        
+        plan: { connect: { id: data.planId } }
       },
+      
     });
 
     return newMember;
@@ -38,6 +41,21 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
     throw error;
   }
 }
+
+
+export async function getAllMembers() {
+  try {
+    const members = await prisma.member.findMany();
+    console.log('Fetched members:', members);
+    return members
+    
+  } catch (error) {
+    console.error('Error fetching members:', error);
+    throw new Error('Failed to fetch members');
+  }
+}
+
+
 
 
 export async function createAdmin({data}: {data: z.infer<typeof adminSchema>}) {
@@ -94,4 +112,6 @@ export async function getAllPlans() {
     throw new Error('Failed to fetch plans');
   }
 }
+
+
 

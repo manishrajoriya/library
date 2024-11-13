@@ -1,10 +1,10 @@
 import React from 'react'
-import FormModel from '@/components/FormModel'
+import { DataCardList } from '@/components/FormModel'
 
 function page() {
   return (
     <div>
-      <FormModel/>
+      <DataCardList/>
     </div>
   )
 }

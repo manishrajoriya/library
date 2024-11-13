@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMember } from '@/lib/action';
-import { getAllPlans } from '@/lib/action';
-import planPage from '@/app/(dashbord)/plan/page';
+
 
 // Define the Zod schema for the Member model
 export const memberSchema = z.object({
@@ -29,14 +28,16 @@ type Plan = {
   name: string;
 };
 
-type MemberFormProps = {
+type PlanFormProps = {
   plans: Plan[];
 };
 
-export default function MemberForm({ plans }: MemberFormProps) {
+export default  function MemberForm({plans}: PlanFormProps) {
   const { register, handleSubmit, formState: { errors } } = useForm<MemberFormData>({
     resolver: zodResolver(memberSchema),
   });
+
+  
 
   
   const onSubmit = (data: MemberFormData) => {

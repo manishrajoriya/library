@@ -14,11 +14,11 @@ export default function fbPage() {
   <div className="grid grid-cols-2 gap-4 mb-6">
     {/* <!-- Card items --> */}
     <div className="flex items-center p-4 bg-white rounded-lg shadow">
-      <img src="group.png" alt="Reels Icon" className="w-6 h-6 mr-2" />
+      <img src="path-to-icon" alt="Reels Icon" className="w-6 h-6 mr-2" />
       <span>Reels</span>
     </div>
     <div className="flex items-center p-4 bg-white rounded-lg shadow">
-      <img src="sms.png" alt="Messages Icon" className="w-6 h-6 mr-2" />
+      <img src="path-to-icon" alt="Messages Icon" className="w-6 h-6 mr-2" />
       <span>Messages</span>
     </div>
     {/* <!-- Repeat similar structure for other menu items --> */}
