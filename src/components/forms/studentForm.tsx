@@ -10,13 +10,16 @@ export const memberSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   address: z.string().optional(),
   contactNumber: z.string().min(10, 'Contact Number is required').max(15),
-  email: z.string().email('Invalid email address').optional(),
+  email: z.string().optional(),
   addmissionDate: z.coerce.date(), // using string for date inputs
   expiryDate: z.coerce.date(),
+  totalAmount: z.coerce.number().optional(),
+  amountPaid: z.coerce.number().optional(),
+  dueAmount: z.coerce.number().optional(),
   status: z.enum(['LIVE', 'EXPIRED']).default('LIVE'),
   seatNumber: z.coerce.number().positive().optional(),
   planId: z.coerce.number().positive().optional(),
-  profileImage: z.string().url('Must be a valid URL').optional(),
+  profileImage: z.string().optional(),
 });
 
 // Define TypeScript type based on the Zod schema
@@ -128,6 +131,39 @@ export default  function MemberForm({plans}: PlanFormProps) {
           placeholder="Seat Number"
         />
         {errors.seatNumber && <p className="text-red-500">{errors.seatNumber.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Total Amount</label>
+        <input
+          type="totalAmount"
+          {...register('totalAmount')}
+          className="input"
+          placeholder="Total Amount"
+        />
+        {errors.totalAmount && <p className="text-red-500">{errors.totalAmount.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Paid Amount</label>
+        <input
+          type="amountPaid"
+          {...register('amountPaid')}
+          className="input"
+          placeholder="Paid Amount"
+        />
+        {errors.amountPaid && <p className="text-red-500">{errors.amountPaid.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Due Amount</label>
+        <input
+          type="dueAmount"
+          {...register('dueAmount')}
+          className="input"
+          placeholder="Due Amount"
+        />
+        {errors.dueAmount && <p className="text-red-500">{errors.dueAmount.message}</p>}
       </div>
 
      <div>

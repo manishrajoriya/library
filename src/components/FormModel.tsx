@@ -3,7 +3,7 @@ import MemberForm from './forms/studentForm'
 import { getAllPlans, getAllMembers } from '@/lib/action'
 import DataCard from './DataCard'
 
-export default async function FormModel() {
+export default async function MemberFormModal() {
         const plans = await getAllPlans()
     return (
         <div >

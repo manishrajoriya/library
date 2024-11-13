@@ -1,6 +1,7 @@
 
 
 
+
 type UserCardProps = {
   logo: string;
   title: string;
@@ -24,4 +25,11 @@ const UserCard =  ({logo, title, count}:UserCardProps) => {
   );
 };
 
-export default UserCard;
+
+
+
+  
+
+
+export default UserCard; 
+ 

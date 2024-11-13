@@ -12,15 +12,14 @@ export default async function plans() {
  
   return (
     <div>
-      <div>
-        
-      </div>
+      
         {plans.map((plan) => (
             <div>
-                <ol>
-            <li key={plan.name}>{plan.name}</li>
-            <li key={plan.description}>{plan.description}</li>
-            <li key={plan.duration}>{plan.duration}</li>
+            <ol>
+            <li key={plan.id}>{plan.name}</li>
+            <li key={plan.id}>{plan.description}</li>
+            <li key={plan.id}>{plan.duration}</li>
+            <li key={plan.id}>{plan.amount}</li>
             </ol>
             </div>
             ))}

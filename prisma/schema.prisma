@@ -32,6 +32,9 @@ model Member {
   seatNumber   Int?
   plan         Plan?            @relation(fields: [planId], references: [id])
   planId       Int?
+  amountPaid  Float?
+  totalAmount Float?
+  dueAmount   Float?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   profileImage String?
