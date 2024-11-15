@@ -1,16 +1,32 @@
 import React from 'react'
 
+import { memberSchema } from './forms/studentForm'
+import { z } from 'zod'
+
+type Member = z.infer<typeof memberSchema>
 
 
 
-
-
-
-function DataCard({name, address, contactNumber, addmissionDate, expiryDate, seatNumber}:any) {
+function DataCard({
+  name, 
+  address, 
+  contactNumber, 
+  addmissionDate, 
+  expiryDate, 
+  seatNumber,
+   totalAmount, 
+   amountPaid, 
+   dueAmount, 
+   plan, 
+   id,
+   status
+  }: any
+  
+) {
   return (
-    <div>
-        <div className="border-2 border-red-200 rounded-lg p-4 w-80 shadow-md">
-  <div className="flex justify-between">
+    <div className='  m-2 '>
+    <div className=" rounded-lg p-4 w-80 shadow-md shadow-zinc-900 bg-white">
+      <div className="flex justify-between">
     {/* <!-- Profile Picture and Info --> */}
     <div className="flex items-center space-x-3">
       <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
@@ -30,8 +46,9 @@ function DataCard({name, address, contactNumber, addmissionDate, expiryDate, sea
 
     {/* <!-- Member ID and Seat Number --> */}
     <div className="text-center">
-      <div className="text-gray-500">2</div>
-      <div className="text-gray-500 text-xs">Memid</div>
+      <div className="text-lg font-semibold">{status}</div>
+      <div className="text-gray-500">{id}</div>
+      <div className="text-gray-500 text-xs">Student id</div>
       <div className="text-red-500 mt-2">{seatNumber}</div>
       <div className="text-gray-500 text-xs">Seat No</div>
     </div>
@@ -53,26 +70,26 @@ function DataCard({name, address, contactNumber, addmissionDate, expiryDate, sea
   <div className="mt-4 grid grid-cols-3 gap-2 text-sm text-gray-600">
     <div>
       <div>Plan</div>
-      <div className="font-semibold text-black">hello</div>
+      <div className="font-semibold text-black">{plan}</div>
     </div>
     <div>
       <div>Final Amt</div>
-      <div className="font-semibold text-black">480</div>
+      <div className="font-semibold text-black">{totalAmount}</div>
     </div>
     <div>
       <div>Paid Amt</div>
-      <div className="font-semibold text-black">470</div>
+      <div className="font-semibold text-black">{amountPaid}</div>
     </div>
   </div>
 
   {/* <!-- Due Amount --> */}
   <div className="mt-4 flex items-center">
     <div className="text-sm text-gray-600">Due</div>
-    <div className="ml-2 px-2 py-1 rounded-md bg-red-500 text-white font-semibold">10</div>
+    <div className="ml-2 px-2 py-1 rounded-md bg-red-500 text-white font-semibold">{dueAmount}</div>
   </div>
 
-  {/* <!-- Action Buttons -->
-  <div className="mt-4 flex justify-around text-red-500 text-sm">
+  {/* <!-- Action Buttons --> */}
+  {/* <div className="mt-4 flex justify-around text-red-500 text-sm">
     <button className="flex flex-col items-center">
       <span>👤</span>
       <span>Profile</span>
@@ -96,9 +113,11 @@ function DataCard({name, address, contactNumber, addmissionDate, expiryDate, sea
     <button className="flex flex-col items-center">
       <span>🧾</span>
       <span>Add Bill</span>
-    </button> */}
-  </div>
+    </button>
+  </div> */}
 </div>
+
+    </div>
 
     
   )

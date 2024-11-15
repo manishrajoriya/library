@@ -8,6 +8,7 @@ import {
 
 import PlanForm from './forms/planForm'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 
 const AddMemberCard = () =>{
@@ -18,7 +19,7 @@ const AddMemberCard = () =>{
     {/* <!-- Card items --> */}
         <button onClick={() =>router.push("/addMember") }>
         <div className="flex items-center p-4 bg-white rounded-lg shadow">
-            <img src="add.png" alt="Reels Icon" className="w-6 h-6 mr-2" />
+            <Image width={6} height={6} src="/add.png" alt="Reels Icon" className="w-6 h-6 mr-2" />
             <span>Add Student</span>
         </div>
        </button>
@@ -30,7 +31,7 @@ const AddMemberCard = () =>{
     <Popover>
     <PopoverTrigger>
     <div className="flex items-center p-4 bg-white rounded-lg shadow">
-      <img src="path-to-icon" alt="Messages Icon" className="w-6 h-6 mr-2" />
+      <Image width={6} height={6} src="/add.png" alt="Messages Icon" className="w-6 h-6 mr-2" />
       <span>Add Plan</span>
     </div>
     </PopoverTrigger>

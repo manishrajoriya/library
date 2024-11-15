@@ -3,9 +3,9 @@
 import { memberSchema } from "@/components/forms/studentForm";
 import { z } from "zod";
 import prisma from "./prisma";
-import { AdminSchema, adminSchema } from "./schemas";
-import { Plan, planSchema } from '@/lib/schemas';
-import exp from "constants";
+import { adminSchema } from "./schemas";
+import {  planSchema } from '@/lib/schemas';
+
 
 
 
@@ -21,15 +21,17 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
       data: {
         
         name: data.name,
-        address: data.address,
+        address: data?.address,
         contactNumber: data.contactNumber,
-        email: data.email,
+        email: data?.email,
         addmissionDate: data.addmissionDate,
         expiryDate: data.expiryDate,
         status: data.status,
-        seatNumber: data.seatNumber,
-        profileImage: data.profileImage,
-        
+        seatNumber: data?.seatNumber,
+        profileImage: data?.profileImage,
+        dueAmount: data?.dueAmount,
+        totalAmount: data?.totalAmount,
+        amountPaid: data?.amountPaid,
         plan: { connect: { id: data.planId } }
       },
       
@@ -38,6 +40,57 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
     return newMember;
   } catch (error) {
     console.error("Failed to create member:", error);
+    throw error;
+  }
+}
+
+export async function deleteMember({ id }: { id: number }) {
+  try {
+    const deletedMember = await prisma.member.delete({
+      where: { id },
+    });
+
+    return deletedMember;
+  } catch (error) {
+    console.error("Failed to delete member:", error);
+    throw error;
+  }
+}
+
+export async function updateMember({
+  id,
+  data,
+}: {
+  id: number;
+  data: z.infer<typeof memberSchema>;
+}) {
+  try {
+    // Validate the data using the zod schema if needed
+    memberSchema.parse(data);
+
+    // Update the member data in the database using Prisma
+    const updatedMember = await prisma.member.update({
+      where: { id },
+      data: {
+        name: data.name,
+        address: data?.address,
+        contactNumber: data.contactNumber,
+        email: data?.email,
+        addmissionDate: data.addmissionDate,
+        expiryDate: data.expiryDate,
+        status: data.status,
+        seatNumber: data?.seatNumber,
+        profileImage: data?.profileImage,
+        dueAmount: data?.dueAmount,
+        totalAmount: data?.totalAmount,
+        amountPaid: data?.amountPaid,
+        plan: { connect: { id: data.planId } },
+      },
+    });
+
+    return updatedMember;
+  } catch (error) {
+    console.error("Failed to update member:", error);
     throw error;
   }
 }
@@ -112,6 +165,50 @@ export async function getAllPlans() {
     throw new Error('Failed to fetch plans');
   }
 }
+
+export async function deletePlan({ id }: { id: number }) {
+  try {
+    const deletedPlan = await prisma.plan.delete({
+      where: { id },
+    });
+
+    return deletedPlan;
+  } catch (error) {
+    console.error("Failed to delete plan:", error);
+    throw error;
+  }
+}
+
+export async function updatePlan({
+  id,
+  data,
+}: {
+  id: number;
+  data: z.infer<typeof planSchema>;
+}) {
+  try {
+    // Validate the data using the zod schema if needed
+    planSchema.parse(data);
+
+    // Update the plan data in the database using Prisma
+    const updatedPlan = await prisma.plan.update({
+      where: { id },
+      data: {
+        name: data.name,
+        description: data.description,
+        duration: data.duration,
+        amount: data.amount,
+      },
+    });
+
+    return updatedPlan;
+  } catch (error) {
+    console.error("Failed to update plan:", error);
+    throw error;
+  }
+}
+
+
 
 
 

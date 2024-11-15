@@ -11,18 +11,17 @@ export default async function plans() {
     
  
   return (
-    <div>
-      
+    <div className="grid grid-cols-1 gap-4 mb-6">
         {plans.map((plan) => (
-            <div>
-            <ol>
-            <li key={plan.id}>{plan.name}</li>
-            <li key={plan.id}>{plan.description}</li>
-            <li key={plan.id}>{plan.duration}</li>
-            <li key={plan.id}>{plan.amount}</li>
-            </ol>
+            <div key={plan.id} className="flex flex-col p-4 bg-white rounded-lg shadow">
+                <ol className="list-inside list-decimal text-sm text-left">
+                    <li key={plan.id}>{plan.name}</li>
+                    <li key={plan.id}>{plan.description}</li>
+                    <li key={plan.id}>{plan.duration}</li>
+                    <li key={plan.id}>{plan.amount}</li>
+                </ol>
             </div>
-            ))}
+        ))}
     </div>
   )
 }

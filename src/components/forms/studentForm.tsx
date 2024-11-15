@@ -3,10 +3,14 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMember } from '@/lib/action';
+import { Input } from '../ui/input';
+
+
 
 
 // Define the Zod schema for the Member model
 export const memberSchema = z.object({
+  id: z.coerce.number().positive().optional(),
   name: z.string().min(1, 'Name is required'),
   address: z.string().optional(),
   contactNumber: z.string().min(10, 'Contact Number is required').max(15),
@@ -18,6 +22,7 @@ export const memberSchema = z.object({
   dueAmount: z.coerce.number().optional(),
   status: z.enum(['LIVE', 'EXPIRED']).default('LIVE'),
   seatNumber: z.coerce.number().positive().optional(),
+  
   planId: z.coerce.number().positive().optional(),
   profileImage: z.string().optional(),
 });
@@ -27,9 +32,10 @@ type MemberFormData = z.infer<typeof memberSchema>;
 
 // Add a type for the plans prop
 type Plan = {
-  id: number;
-  name: string;
-};
+    id: number;
+    name: string;
+    
+}
 
 type PlanFormProps = {
   plans: Plan[];
@@ -50,13 +56,14 @@ export default  function MemberForm({plans}: PlanFormProps) {
   };
 
   return (
+    <div className='flex justify-center w-[90%] sm:w-1/2'>
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input
+        <Input
           type="text"
           {...register('name')}
-          className="input"
+          className="input "
           placeholder="Full Name"
         />
         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
@@ -64,7 +71,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Address</label>
-        <input
+        <Input
           type="text"
           {...register('address')}
           className="input"
@@ -74,7 +81,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Contact Number</label>
-        <input
+        <Input
           type="text"
           {...register('contactNumber')}
           className="input"
@@ -85,7 +92,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Email</label>
-        <input
+        <Input
           type="email"
           {...register('email')}
           className="input"
@@ -96,7 +103,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Admission Date</label>
-        <input
+        <Input
           type="date"
           {...register('addmissionDate')}
           className="input"
@@ -106,7 +113,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Expiry Date</label>
-        <input
+        <Input
           type="date"
           {...register('expiryDate')}
           className="input"
@@ -116,7 +123,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Status</label>
-        <select {...register('status')} className="input">
+        <select {...register('status')} className="input h-9 w-full px-3 py-1 rounded-md outline-1">
           <option value="LIVE">Live</option>
           <option value="EXPIRED">Inactive</option>
         </select>
@@ -124,7 +131,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Seat Number</label>
-        <input
+        <Input
           type="number"
           {...register('seatNumber')}
           className="input"
@@ -135,8 +142,8 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Total Amount</label>
-        <input
-          type="totalAmount"
+        <Input
+          type="number"
           {...register('totalAmount')}
           className="input"
           placeholder="Total Amount"
@@ -146,8 +153,8 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Paid Amount</label>
-        <input
-          type="amountPaid"
+        <Input
+          type="number"
           {...register('amountPaid')}
           className="input"
           placeholder="Paid Amount"
@@ -157,8 +164,8 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Due Amount</label>
-        <input
-          type="dueAmount"
+        <Input
+          type="number" 
           {...register('dueAmount')}
           className="input"
           placeholder="Due Amount"
@@ -170,11 +177,11 @@ export default  function MemberForm({plans}: PlanFormProps) {
         <label className="block text-sm font-medium text-gray-700">Plan</label>
         <select
           {...register('planId', { valueAsNumber: true })} // Register as a number
-          className="input"
+          className="input h-9 w-full px-3 py-1 rounded-md outline-1"
         >
-          <option value="">Select Plan</option>
+          <option value="" >Select Plan</option>
           {plans.map((plan) => (
-            <option key={plan.id} value={plan.id}>
+            <option  key={plan.id} value={plan.id}>
               {plan.name}
             </option>
           ))}
@@ -184,7 +191,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Profile Image URL</label>
-        <input
+        <Input
           
           type="url"
           {...register('profileImage')}
@@ -198,5 +205,6 @@ export default  function MemberForm({plans}: PlanFormProps) {
         Submit
       </button>
     </form>
+    </div>
   );
 }

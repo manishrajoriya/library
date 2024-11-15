@@ -3,7 +3,7 @@ import { DataCardList } from '@/components/FormModel'
 
 function page() {
   return (
-    <div>
+    <div className='flex flex-row justify-center'>
       <DataCardList/>
     </div>
   )
