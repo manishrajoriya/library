@@ -14,6 +14,9 @@ model Admin {
   email     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  members   Member[]
+  plans     Plan[]
+  expenses  Expense[]
 }
 
 model Member {
@@ -38,7 +41,8 @@ model Member {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   profileImage String?
-
+  admin         Admin         @relation(fields: [adminId], references: [id])
+  adminId       Int           // Foreign key to Admin
   
 }
 
@@ -50,6 +54,8 @@ model Plan {
   amount       Float
   members      Member[]
   createdAt    DateTime  @default(now())
+  admin        Admin     @relation(fields: [adminId], references: [id])
+  adminId      Int       // Foreign key to Admin
 }
 
 model FeeCollection {
@@ -72,6 +78,8 @@ model Expense {
   date        DateTime  @default(now())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  admin        Admin     @relation(fields: [adminId], references: [id])
+  adminId      Int       // Foreign key to Admin
 }
 
 model Reminder {
@@ -81,6 +89,7 @@ model Reminder {
   message    String
   dueDate    DateTime?
   createdAt  DateTime  @default(now())
+  
 }
 
 model FollowUp {

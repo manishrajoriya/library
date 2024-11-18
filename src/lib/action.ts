@@ -3,11 +3,21 @@
 import { memberSchema } from "@/components/forms/studentForm";
 import { z } from "zod";
 import prisma from "./prisma";
-import { adminSchema } from "./schemas";
+
 import {  planSchema } from '@/lib/schemas';
+import { auth } from '@clerk/nextjs/server'
 
+// export async function createAdmin({data}){
+//   const {userId, redirectToSignIn } = await auth()
+//   if (!userId) return redirectToSignIn()
+//     console.log(userId);
+//   const result = await prisma.admin.create({
+//     data: {
 
-
+//     }
+//   })
+    
+// }
 
 
 export async function createMember({data}: {data: z.infer<typeof memberSchema>}) {
@@ -109,30 +119,6 @@ export async function getAllMembers() {
 }
 
 
-
-
-export async function createAdmin({data}: {data: z.infer<typeof adminSchema>}) {
-    
-  try {
-    // Validate the data using zod schema
-    const validatedData = adminSchema.parse(data);
-
-    // Insert the validated data into the database using Prisma
-    const newAdmin = await prisma.admin.create({
-      data: {
-        id: validatedData.id,
-        username: validatedData.username,
-        password: validatedData.password,
-        email: validatedData.email,
-      },
-    });
-
-    return newAdmin;
-  } catch (error) {
-    console.error("Failed to create admin:", error);
-    throw error;
-  }
-    }
 
 
 export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {

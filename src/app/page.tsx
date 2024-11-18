@@ -1,3 +1,4 @@
+import { UserButton } from '@clerk/nextjs';
 import React from 'react';
 
 const HomePage = () => {
@@ -14,7 +15,7 @@ const HomePage = () => {
       {/* Hero Section */}
       <section className="flex flex-col items-center text-center py-16">
         <div className="bg-purple-700 p-4 rounded-full mb-4">
-          <span className="text-4xl font-bold">G</span>
+          <span className="text-4xl font-bold"><UserButton/></span>
         </div>
         <h1 className="text-4xl font-extrabold mb-4">
           We develop your app idea's MVP in 80 hours
