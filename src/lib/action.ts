@@ -24,10 +24,13 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
     
   try {
     // Validate the data using zod schema
-    
-
+    const {userId, redirectToSignIn } = await auth()
+    if (!userId) return redirectToSignIn()
+    memberSchema.parse(data);
+ 
     // Insert the validated data into the database using Prisma
     const newMember = await prisma.member.create({
+     
       data: {
         
         name: data.name,
