@@ -7,15 +7,12 @@ import prisma from "./prisma";
 import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
 
-// export async function createAdmin({data}){
+
+// export async function AdminId(){
 //   const {userId, redirectToSignIn } = await auth()
 //   if (!userId) return redirectToSignIn()
 //     console.log(userId);
-//   const result = await prisma.admin.create({
-//     data: {
-
-//     }
-//   })
+//   return userId
     
 // }
 
@@ -24,15 +21,19 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
     
   try {
     // Validate the data using zod schema
-    const {userId, redirectToSignIn } = await auth()
-    if (!userId) return redirectToSignIn()
-    memberSchema.parse(data);
- 
+    const { userId } = await auth()
+    console.log(userId);
+    
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+   console.log(data);
+   
     // Insert the validated data into the database using Prisma
     const newMember = await prisma.member.create({
-     
+      
       data: {
-        
+        adminId: userId,
         name: data.name,
         address: data?.address,
         contactNumber: data.contactNumber,
@@ -45,11 +46,16 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
         dueAmount: data?.dueAmount,
         totalAmount: data?.totalAmount,
         amountPaid: data?.amountPaid,
-        plan: { connect: { id: data.planId } }
+        
+        planId: data?.planId || null
+      
+        
       },
       
+      
     });
-
+   console.log(newMember);
+   
     return newMember;
   } catch (error) {
     console.error("Failed to create member:", error);

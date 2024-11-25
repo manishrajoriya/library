@@ -10,10 +10,12 @@ datasource db {
 model Admin {
   id        String      @id @default(cuid())
   username  String   @unique
+  members   Member[]
   
 }
 
 model Member {
+ 
   id           Int              @id @default(autoincrement())
   name         String
   address      String?
@@ -35,7 +37,8 @@ model Member {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   profileImage String?
- 
+  adminId      String?
+  admin        Admin? @relation(fields: [adminId], references: [id])
   
 }
 

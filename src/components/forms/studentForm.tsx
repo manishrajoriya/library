@@ -22,9 +22,10 @@ export const memberSchema = z.object({
   dueAmount: z.coerce.number().optional(),
   status: z.enum(['LIVE', 'EXPIRED']).default('LIVE'),
   seatNumber: z.coerce.number().positive().optional(),
-  
-  planId: z.coerce.number().positive().optional(),
+  plan: z.string().optional(),
+  planId: z.coerce.number().optional(),
   profileImage: z.string().optional(),
+  
 });
 
 // Define TypeScript type based on the Zod schema
@@ -50,6 +51,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
 
   
   const onSubmit = (data: MemberFormData) => {
+    
     createMember({data});
     console.log(data);
     // Handle form submission, e.g., send data to an API or save in a database
