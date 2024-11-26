@@ -8,7 +8,7 @@ export  async function TotalMembers() {
     const membersCount = await prisma.member.count();
 
     return (
-       <button title="Total Members" >
+       <button type="button" title="Total Members" >
         <UserCard logo="/group.png" title="Totle Student" count={membersCount} />
        </button>
     )

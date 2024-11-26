@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma'
 
 
 
+
 export default async function MemberFormModal() {
         const plans = await getAllPlans()
     return (
@@ -49,7 +50,19 @@ export async function DataCardList() {
                 </div>
             ))} */}
 
-            {members.map((member) => (
+            {members.map((member:{id:number,
+             name:string,
+              address:string| null, 
+              contactNumber:string,
+               addmissionDate:Date,
+                expiryDate:Date,
+                 seatNumber:number| null,
+                  totalAmount:number| null,
+                   amountPaid:number| null,
+                    dueAmount:number| null,
+                     status:"LIVE" | "EXPIRED",
+                      
+            }) => (
                 <div key={member.id}>
                     <DataCard 
                         name={member.name} 
@@ -58,7 +71,7 @@ export async function DataCardList() {
                         addmissionDate={member.addmissionDate} 
                         expiryDate={member.expiryDate} 
                         seatNumber={member.seatNumber || 0}
-                        plan={member.plan?.name || ''}
+                        // plan={member.plan?.name || ''}
                         totalAmount={member.totalAmount || 0}
                         amountPaid={member.amountPaid || 0}
                         dueAmount={member.dueAmount || 0}

@@ -17,7 +17,7 @@ const AddMemberCard = () =>{
       <div>
         <div className="grid grid-cols-1 gap-4 mb-6">
     {/* <!-- Card items --> */}
-        <button onClick={() =>router.push("/addMember") }>
+        <button title='Add Student' onClick={() =>router.push("/addMember") }>
         <div className="flex items-center p-4 bg-white rounded-lg shadow">
             <Image width={6} height={6} src="/add.png" alt="Reels Icon" className="w-6 h-6 mr-2" />
             <span>Add Student</span>
