@@ -1,5 +1,6 @@
 "use client"
 import { UserButton } from '@clerk/nextjs';
+import Image from 'next/image';
 import { useState } from 'react';
 import { FiHome, FiUser, FiFolder, FiCalendar, FiFileText, FiBarChart2, FiMenu } from 'react-icons/fi';
 
@@ -17,7 +18,7 @@ export default function DashboardLayout({ children }:  Readonly<{
         } transition-transform duration-200 ease-in-out sm:translate-x-0`}
       >
         <div className="flex items-center justify-center h-16 bg-blue-600">
-          <img src="/sms.png" alt="Logo" className="h-8" />
+          <Image src="/sms.png" alt="Logo" className="h-8" />
         </div>
         <nav className="mt-5">
           <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">

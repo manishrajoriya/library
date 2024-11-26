@@ -1,8 +1,10 @@
 import React from 'react'
-import MemberForm, { memberSchema } from './forms/studentForm'
+import MemberForm from './forms/studentForm'
 import { getAllPlans } from '@/lib/action'
 import DataCard from './DataCard'
 import prisma from '@/lib/prisma'
+
+
 
 export default async function MemberFormModal() {
         const plans = await getAllPlans()
@@ -14,9 +16,7 @@ export default async function MemberFormModal() {
 }
 
 export async function DataCardList() {
-
-   
-
+ 
     const members = await prisma.member.findMany({
         include: {
             plan: {
@@ -30,7 +30,7 @@ export async function DataCardList() {
     
     return (
         <div>
-            {members.map((member:any) => (
+            {/* {members.map((member: Member) => (
                 <div key={member.id}>
                     <DataCard 
                         name={member.name} 
@@ -47,7 +47,26 @@ export async function DataCardList() {
                         status={member.status}
                     />
                 </div>
-            ))}
+            ))} */}
+
+            {members.map((member) => (
+                <div key={member.id}>
+                    <DataCard 
+                        name={member.name} 
+                        address={member.address || ''} 
+                        contactNumber={member.contactNumber} 
+                        addmissionDate={member.addmissionDate} 
+                        expiryDate={member.expiryDate} 
+                        seatNumber={member.seatNumber || 0}
+                        plan={member.plan?.name || ''}
+                        totalAmount={member.totalAmount || 0}
+                        amountPaid={member.amountPaid || 0}
+                        dueAmount={member.dueAmount || 0}
+                        id={member.id || 0}
+                        status={member.status}
+                    />
+                </div>
+           ))}
         </div>
     );
 }

@@ -1,6 +1,6 @@
 
 "use server"
-import { memberSchema } from "@/components/forms/studentForm";
+import { memberSchema } from "@/lib/schemas";
 import { z } from "zod";
 import prisma from "./prisma";
 
@@ -33,7 +33,7 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
     const newMember = await prisma.member.create({
       
       data: {
-        adminId: userId,
+        
         name: data.name,
         address: data?.address,
         contactNumber: data.contactNumber,
@@ -46,8 +46,8 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
         dueAmount: data?.dueAmount,
         totalAmount: data?.totalAmount,
         amountPaid: data?.amountPaid,
+        plan: { connect: { id: data?.planId } },
         
-        planId: data?.planId || null
       
         
       },

@@ -7,7 +7,7 @@ const HomePage = () => {
       {/* Header */}
       <header className="flex justify-between items-center p-4 bg-transparent">
         <div className="text-2xl font-bold">G</div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+        <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded-lg">
           Discuss Your Idea
         </button>
       </header>
@@ -18,12 +18,12 @@ const HomePage = () => {
           <span className="text-4xl font-bold"><UserButton/></span>
         </div>
         <h1 className="text-4xl font-extrabold mb-4">
-          We develop your app idea's MVP in 80 hours
+          We develop your app idea MVP in 80 hours
         </h1>
         <p className="max-w-md mb-6">
           Receive a fully functional mobile app in only 80 hours.
         </p>
-        <button className="bg-blue-600 px-6 py-3 rounded-lg">
+        <button type="button" className="bg-blue-600 px-6 py-3 rounded-lg">
           Discuss Your Idea
         </button>
       </section>
@@ -59,18 +59,15 @@ const HomePage = () => {
       <section className="py-16 text-center">
         <h2 className="text-3xl font-bold mb-8">Why Choose Us?</h2>
         <p className="max-w-md mx-auto mb-12">
-          You don't need a development team. You need a partner who works with you.
+          You do not need a development team. You need a partner who works with you.
         </p>
         <div className="flex justify-center">
           <WhyChooseUsGraphic />
         </div>
         <ul className="mt-8 space-y-4 text-left max-w-2xl mx-auto">
           <li><strong>Agile:</strong> Our youthful team brings fresh perspectives...</li>
-          <li><strong>Passionate:</strong> Our passion for technology drives us...</li>
-          <li><strong>Dedicated:</strong> We're committed to your success...</li>
-          <li><strong>Adaptable:</strong> Our team thrives on change...</li>
-          <li><strong>Innovative:</strong> We're not just developers, we're innovators...</li>
-          <li><strong>24/7 Support:</strong> We're here for you around the clock...</li>
+          <li><strong>Collaboration:</strong> We value teamwork and open communication...</li>
+          <li><strong>Customer Focus:</strong> We prioritize your success...</li>
         </ul>
       </section>
     </div>
@@ -78,7 +75,7 @@ const HomePage = () => {
 };
 
 // Feature Card Component
-const FeatureCard = ({ title, description, detail, icon }:any) => (
+const FeatureCard = ({ title, description, detail, icon }:{title: string, description: string, detail: string, icon: string}) => (
   <div className="bg-purple-800 p-6 rounded-lg max-w-xs text-center mx-auto">
     <div className="text-4xl">{icon}</div>
     <h3 className="text-2xl font-bold mt-4">{title}</h3>

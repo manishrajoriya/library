@@ -1,35 +1,18 @@
 "use client"
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMember } from '@/lib/action';
 import { Input } from '../ui/input';
-
+import { memberSchema, memberSchemaType } from '@/lib/schemas';
 
 
 
 // Define the Zod schema for the Member model
-export const memberSchema = z.object({
-  id: z.coerce.number().positive().optional(),
-  name: z.string().min(1, 'Name is required'),
-  address: z.string().optional(),
-  contactNumber: z.string().min(10, 'Contact Number is required').max(15),
-  email: z.string().optional(),
-  addmissionDate: z.coerce.date(), // using string for date inputs
-  expiryDate: z.coerce.date(),
-  totalAmount: z.coerce.number().optional(),
-  amountPaid: z.coerce.number().optional(),
-  dueAmount: z.coerce.number().optional(),
-  status: z.enum(['LIVE', 'EXPIRED']).default('LIVE'),
-  seatNumber: z.coerce.number().positive().optional(),
-  plan: z.string().optional(),
-  planId: z.coerce.number().optional(),
-  profileImage: z.string().optional(),
-  
-});
+
 
 // Define TypeScript type based on the Zod schema
-type MemberFormData = z.infer<typeof memberSchema>;
+
 
 // Add a type for the plans prop
 type Plan = {
@@ -43,14 +26,14 @@ type PlanFormProps = {
 };
 
 export default  function MemberForm({plans}: PlanFormProps) {
-  const { register, handleSubmit, formState: { errors } } = useForm<MemberFormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm<memberSchemaType>({
     resolver: zodResolver(memberSchema),
   });
 
   
 
   
-  const onSubmit = (data: MemberFormData) => {
+  const onSubmit = (data: memberSchemaType) => {
     
     createMember({data});
     console.log(data);

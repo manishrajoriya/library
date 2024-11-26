@@ -1,26 +1,24 @@
 import React from 'react'
+import {  memberSchemaType } from '@/lib/schemas';
 
-import { memberSchema } from './forms/studentForm'
-import { z } from 'zod'
 
-type Member = z.infer<typeof memberSchema>
 
 
 
 function DataCard({
-  name, 
-  address, 
-  contactNumber, 
-  addmissionDate, 
-  expiryDate, 
-  seatNumber,
-   totalAmount, 
-   amountPaid, 
-   dueAmount, 
-   plan, 
-   id,
-   status
-  }: any
+ id,
+ name,
+ address,
+ contactNumber,
+ addmissionDate,
+ expiryDate,
+ seatNumber,
+ plan,
+ totalAmount,
+ amountPaid,
+ dueAmount,
+ status
+  }: memberSchemaType
   
 ) {
   return (
@@ -58,11 +56,11 @@ function DataCard({
   <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
     <div>
       <div>Join Date</div>
-      <div className="font-semibold text-black">{addmissionDate}</div>
+      <div className="font-semibold text-black">{addmissionDate.toLocaleDateString()}</div>
     </div>
     <div>
       <div>End Date</div>
-      <div className="font-semibold text-black">{expiryDate}</div>
+      <div className="font-semibold text-black">{expiryDate.toLocaleDateString()}</div>
     </div>
   </div>
 
