@@ -1,4 +1,5 @@
 import { UserButton } from '@clerk/nextjs';
+import Link from 'next/link';
 import React from 'react';
 
 const HomePage = () => {
@@ -23,9 +24,11 @@ const HomePage = () => {
         <p className="max-w-md mb-6">
           Receive a fully functional mobile app in only 80 hours.
         </p>
+        <Link href="/User">
         <button type="button" className="bg-blue-600 px-6 py-3 rounded-lg">
           Discuss Your Idea
         </button>
+        </Link>
       </section>
 
       {/* Features Section */}
