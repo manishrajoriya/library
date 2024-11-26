@@ -12,7 +12,12 @@ export default async function plans() {
  
   return (
     <div className="grid grid-cols-1 gap-4 mb-6">
-        {plans.map((plan) => (
+        {plans.map((plan: { id: number; 
+            name: string;
+            description: string | null;
+            duration: number;
+            amount: number
+        }) => (
             <div key={plan.id} className="flex flex-col p-4 bg-white rounded-lg shadow">
                 <ol className="list-inside list-decimal text-sm text-left">
                     <li key={plan.id}>{plan.name}</li>
