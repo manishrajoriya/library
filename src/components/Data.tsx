@@ -1,11 +1,15 @@
-
 import UserCard from "./Card";
-import prisma from "@/lib/prisma";
-
+import { countMembers, 
+    liveMembersCount, 
+    inactiveMembersCount,
+    totalAmountCount, 
+    dueAmountCount,
+    paidAmountCount
+  } from "@/lib/action";
 
 export  async function TotalMembers() {
     
-    const membersCount = await prisma.member.count();
+   const membersCount = await countMembers();
 
     return (
        <button type="button" title="Total Members" >
@@ -15,85 +19,49 @@ export  async function TotalMembers() {
 }
 
 export  async function TotalAmountPaidCard() {
-    
-    const result = await prisma.member.aggregate({
-        _sum: {
-            amountPaid: true,
-        },
-    })
-    const totalPaidAmount = result._sum.amountPaid|| 0;
-    console.log("amount paid",totalPaidAmount);
-    
+  const Count = await paidAmountCount();
     return (
        <button title="Paid Amount" >
-        <UserCard logo="/collection.png" title="Paid Amount" count={totalPaidAmount} />
+        <UserCard logo="/collection.png" title="Paid Amount" count={Count} />
        </button>
     )
 
 }
 
 export  async function TotalAmountCard() {
-    
-    const result = await prisma.member.aggregate({
-        _sum: {
-            totalAmount: true,
-        },
-    })
-    const totalAmount = result._sum.totalAmount|| 0;
-    console.log("total amount", totalAmount);
-    
+    const Count = await totalAmountCount();
     return (
        <button title="Total Amount" >
-        <UserCard logo="/expence.png" title="Total Amount" count={totalAmount} />
+        <UserCard logo="/expence.png" title="Total Amount" count={Count} />
        </button>
     )
 
 }
 
 export  async function DueAmountCard() {
-    
-    const result = await prisma.member.aggregate({
-        _sum: {
-            dueAmount: true,
-        },
-    })
-    const totalDueAmount = result._sum.dueAmount|| 0;
-    console.log("amount due",totalDueAmount);
-    
+  const Count = await dueAmountCount();
     return (
        <button title="Due Amount" >
-        <UserCard logo="/due.png" title="Due Amount" count={totalDueAmount} />
+        <UserCard logo="/due.png" title="Due Amount" count={Count} />
        </button>
     )
 
 }
 
 export async function LiveMemberCard() {
-    
-    const result = await prisma.member.count({
-        where:{
-            status:"LIVE"
-        }
-    })
-    console.log("live members",result);
-    
+   const Count = await liveMembersCount();
     return (
        <button title="Live Members" >
-        <UserCard logo="/people3.png" title="Live Members" count={result} />
+        <UserCard logo="/people3.png" title="Live Members" count={Count} />
        </button>
     )
 }
 
 export async function InactiveMemberCard() {
-    const result = await prisma.member.count({
-        where:{
-            status:"EXPIRED"
-        }
-    })
-    console.log("inactive members",result);
+   const Count = await inactiveMembersCount();
     return (
        <button title="inactive Members" >
-        <UserCard logo="/delete.png" title="Inactive Members" count={result} />
+        <UserCard logo="/delete.png" title="Inactive Members" count={Count} />
        </button>
     )
 }

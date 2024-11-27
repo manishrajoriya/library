@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const HomePage = () => {
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-800 to-black text-white">
       {/* Header */}

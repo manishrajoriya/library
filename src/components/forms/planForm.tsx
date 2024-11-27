@@ -15,7 +15,7 @@ function PlanForm() {
 
   const onSubmit = (data: Plan) => {
     createPlan({data});
-    console.log(data);
+    // console.log(data);
     // Handle form submission, e.g., send data to an API or save in a database
   };
 

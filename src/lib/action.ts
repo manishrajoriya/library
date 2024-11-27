@@ -6,34 +6,28 @@ import prisma from "./prisma";
 
 import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
+import exp from "constants";
 
 
-// export async function AdminId(){
-//   const {userId, redirectToSignIn } = await auth()
-//   if (!userId) return redirectToSignIn()
-//     console.log(userId);
-//   return userId
-    
-// }
+
 
 
 export async function createMember({data}: {data: z.infer<typeof memberSchema>}) {
     
   try {
     // Validate the data using zod schema
-    const { userId } = await auth()
-    console.log(userId);
-    
-    if (!userId) {
-      throw new Error("User not authenticated");
-    }
-   console.log(data);
-   
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id: userId
+      },
+    })
     // Insert the validated data into the database using Prisma
     const newMember = await prisma.member.create({
       
       data: {
-        
+        admin: { connect: { id: admin?.id} },
         name: data.name,
         address: data?.address,
         contactNumber: data.contactNumber,
@@ -117,7 +111,16 @@ export async function updateMember({
 
 export async function getAllMembers() {
   try {
-    const members = await prisma.member.findMany();
+     const {userId, redirectToSignIn} =await auth()
+     
+     
+    if (!userId) return redirectToSignIn()
+    const members = await prisma.member.findMany({
+      
+      where: {
+        adminId: userId
+      }
+    });
     console.log('Fetched members:', members);
     return members
     
@@ -127,24 +130,152 @@ export async function getAllMembers() {
   }
 }
 
+export async function countMembers() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const membersCount = await prisma.member.count({
+      where: {
+        adminId: userId
+      }
+    });
+    return membersCount;
+  } catch (error) {
+    console.error('Error counting members:', error);
+    throw new Error('Failed to count members');
+  }
+}
+
+export async function liveMembersCount() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const Count = await prisma.member.count({
+      where: {
+        adminId: userId,
+        status:"LIVE"
+      }
+    });
+    return Count;
+  } catch (error) {
+    console.error('Error counting members:', error);
+    throw new Error('Failed to count members');
+  }
+}
+
+export async function inactiveMembersCount() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const Count = await prisma.member.count({
+      where: {
+        adminId: userId,
+        status:"EXPIRED"
+      }
+    });
+    return Count;
+  } catch (error) {
+    console.error('Error counting members:', error);
+    throw new Error('Failed to count members');
+  }
+}
+
+export async function totalAmountCount() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const result = await prisma.member.aggregate({
+      where: {
+        adminId: userId,
+      },
+      _sum: {
+        totalAmount: true
+      }
+
+    });
+
+   const Count = result._sum.totalAmount || 0
+    return Count;
+  } catch (error) {
+    console.error('Error counting members:', error);
+    throw new Error('Failed to count members');
+  }
+}
+
+export async function dueAmountCount() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const result = await prisma.member.aggregate({
+      where: {
+        adminId: userId,
+      },
+      _sum: {
+        dueAmount: true
+      }
+
+    });
+
+   const Count = result._sum.dueAmount || 0
+    return Count;
+  } catch (error) {
+    console.error('Error counting members:', error);
+    throw new Error('Failed to count members');
+  }
+}
+
+export async function paidAmountCount() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const result = await prisma.member.aggregate({
+      where: {
+        adminId: userId,
+      },
+      _sum: {
+        amountPaid: true
+      }
+
+    });
+
+   const Count = result._sum.amountPaid || 0
+    return Count;
+  } catch (error) {
+    console.error('Error counting members:', error);
+    throw new Error('Failed to count members');  
+  }
+}
+
 
 
 
 export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
   try {
+     const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+      const admin = await prisma.admin.findUnique({
+        where: {
+          id: userId
+        }
+      })
     const plan = await prisma.plan.create({
       data: {
         name: data.name,
         description: data.description,
         duration: data.duration,
-        amount: data.amount
+        amount: data.amount,
+        admin: {
+          connect: {
+            id: admin?.id
+          }
+        }
       }
     });
-    console.log(plan);
+    
     return plan
     
   } catch (error) {
-    console.log(error);
+    console.log("unable to create plan",error);
     
   }
 }
@@ -152,7 +283,7 @@ export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
 export async function getAllPlans() {
   try {
     const plans = await prisma.plan.findMany();
-    console.log('Fetched plans:', plans);
+    
     return plans
     
   } catch (error) {

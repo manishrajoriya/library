@@ -36,7 +36,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
   const onSubmit = (data: memberSchemaType) => {
     
     createMember({data});
-    console.log(data);
+    // console.log(data);
     // Handle form submission, e.g., send data to an API or save in a database
   };
 

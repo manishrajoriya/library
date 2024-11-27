@@ -2,8 +2,8 @@ import React from 'react'
 import MemberForm from './forms/studentForm'
 import { getAllPlans } from '@/lib/action'
 import DataCard from './DataCard'
-import prisma from '@/lib/prisma'
 
+import { getAllMembers } from '@/lib/action'
 
 
 
@@ -18,49 +18,23 @@ export default async function MemberFormModal() {
 
 export async function DataCardList() {
  
-    const members = await prisma.member.findMany({
-        include: {
-            plan: {
-                select: {
-                    name: true,
-                },
-            },
-        },
-    });
-    console.log(members);
+  
+    const members = await getAllMembers();
+    
     
     return (
         <div>
-            {/* {members.map((member: Member) => (
-                <div key={member.id}>
-                    <DataCard 
-                        name={member.name} 
-                        address={member.address} 
-                        contactNumber={member.contactNumber} 
-                        addmissionDate={member.addmissionDate.toLocaleDateString()} 
-                        expiryDate={member.expiryDate.toLocaleDateString()} 
-                        seatNumber={member.seatNumber}
-                        plan={member.plan?.name}
-                        totalAmount={member.totalAmount}
-                        amountPaid={member.amountPaid}
-                        dueAmount={member.dueAmount}
-                        id={member.id}
-                        status={member.status}
-                    />
-                </div>
-            ))} */}
-
             {members.map((member:{id:number,
              name:string,
               address:string| null, 
               contactNumber:string,
-               addmissionDate:Date,
-                expiryDate:Date,
-                 seatNumber:number| null,
-                  totalAmount:number| null,
-                   amountPaid:number| null,
-                    dueAmount:number| null,
-                     status:"LIVE" | "EXPIRED",
+              addmissionDate:Date,
+              expiryDate:Date,
+              seatNumber:number| null,
+              totalAmount:number| null,
+              amountPaid:number| null,
+              dueAmount:number| null,
+              status:"LIVE" | "EXPIRED",
                       
             }) => (
                 <div key={member.id}>
