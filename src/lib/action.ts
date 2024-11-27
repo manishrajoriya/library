@@ -1,13 +1,12 @@
 
 "use server"
-import { memberSchema } from "@/lib/schemas";
+import { expenseSchema, memberSchema } from "@/lib/schemas";
 import { z } from "zod";
 import prisma from "./prisma";
 
 import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
 import exp from "constants";
-
 
 
 
@@ -41,15 +40,9 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
         totalAmount: data?.totalAmount,
         amountPaid: data?.amountPaid,
         plan: { connect: { id: data?.planId } },
-        
-      
-        
       },
-      
-      
     });
    console.log(newMember);
-   
     return newMember;
   } catch (error) {
     console.error("Failed to create member:", error);
@@ -282,7 +275,13 @@ export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
 
 export async function getAllPlans() {
   try {
-    const plans = await prisma.plan.findMany();
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const plans = await prisma.plan.findMany({
+      where: {
+        adminId: userId
+      }
+    });
     
     return plans
     
@@ -294,8 +293,10 @@ export async function getAllPlans() {
 
 export async function deletePlan({ id }: { id: number }) {
   try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
     const deletedPlan = await prisma.plan.delete({
-      where: { id },
+      where: {  adminId: userId, id },
     });
 
     return deletedPlan;
@@ -313,12 +314,10 @@ export async function updatePlan({
   data: z.infer<typeof planSchema>;
 }) {
   try {
-    // Validate the data using the zod schema if needed
-    planSchema.parse(data);
-
-    // Update the plan data in the database using Prisma
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
     const updatedPlan = await prisma.plan.update({
-      where: { id },
+      where: { adminId: userId, id },
       data: {
         name: data.name,
         description: data.description,
@@ -335,6 +334,93 @@ export async function updatePlan({
 }
 
 
+export async function createExpense({data}: {data: z.infer<typeof expenseSchema>}) {
+  try {
+     const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+      const admin = await prisma.admin.findUnique({
+        where: {
+          id: userId
+        }
+      })
+    const expense = await prisma.expense.create({
+      data: {
+        description: data.description,
+        amount: data.amount,
+        date: data.date,
+        admin: {
+          connect: {
+            id: admin?.id
+          }
+        }
+      }
+    });
+    
+    return expense
+    
+  } catch (error) {
+    console.log("unable to create expense",error);
+    
+  }
+}
 
+export async function getAllExpenses() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const expenses = await prisma.expense.findMany({
+      where: {
+        adminId: userId
+      }
+    });
+    
+    return expenses
+    
+  } catch (error) {
+    console.error('Error fetching expenses:', error);
+    throw new Error('Failed to fetch expenses');
+  }
+}
+
+export async function deleteExpense({ id }: { id: number }) {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const deletedExpense = await prisma.expense.delete({
+      where: {  adminId: userId, id },
+    });
+
+    return deletedExpense;
+  } catch (error) {
+    console.error("Failed to delete expense:", error);
+    throw error;
+  }
+}
+
+export async function updateExpense({
+  id,
+  data,
+}: {
+  id: number;
+  data: z.infer<typeof expenseSchema>;
+}) {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const updatedExpense = await prisma.expense.update({
+      where: { adminId: userId, id },
+      data: {
+        description: data.description,
+        amount: data.amount,
+        date: data.date,
+      },
+    });
+
+    return updatedExpense;
+  } catch (error) {
+    console.error("Failed to update expense:", error);
+    throw error;
+  }
+}
 
 

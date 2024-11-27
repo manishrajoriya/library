@@ -17,14 +17,13 @@ function page() {
       <Link href={'/members'}>
        <TotalMembers/>
        </Link>
-       {/* <UserCard logo='group.png' title='Totle Student' count={5}/> */}
-       <UserCard logo='/delete.png' title='Deleted Student' count={3}/>
        <LiveMemberCard/>
        <InactiveMemberCard/>
        <TotalAmountPaidCard/>
        <TotalAmountCard/>
        <DueAmountCard/>
        <UserCard logo='/p&l.png' title='p&l' count={3}/>
+       <UserCard logo='/p&l.png' title='Expence' count={3}/>
        <UserCard logo='/sms.png' title='Message' count={3}/>
        <AddMemberCard/>
    </div>

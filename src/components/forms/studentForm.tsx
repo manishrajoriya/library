@@ -7,14 +7,6 @@ import { Input } from '../ui/input';
 import { memberSchema, memberSchemaType } from '@/lib/schemas';
 
 
-
-// Define the Zod schema for the Member model
-
-
-// Define TypeScript type based on the Zod schema
-
-
-// Add a type for the plans prop
 type Plan = {
     id: number;
     name: string;
@@ -36,6 +28,9 @@ export default  function MemberForm({plans}: PlanFormProps) {
   const onSubmit = (data: memberSchemaType) => {
     
     createMember({data});
+    //  setTimeout(() => {
+    //      window.location.reload(); // Refresh the page to load new data
+    //   }, 1000);
     // console.log(data);
     // Handle form submission, e.g., send data to an API or save in a database
   };
@@ -90,6 +85,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
         <label className="block text-sm font-medium text-gray-700">Admission Date</label>
         <Input
           type="date"
+          defaultValue={new Date().toISOString().split('T')[0]}
           {...register('addmissionDate')}
           className="input"
         />
@@ -100,6 +96,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
         <label className="block text-sm font-medium text-gray-700">Expiry Date</label>
         <Input
           type="date"
+          defaultValue={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
           {...register('expiryDate')}
           className="input"
         />

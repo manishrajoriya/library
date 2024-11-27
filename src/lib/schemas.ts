@@ -1,13 +1,12 @@
 
-import { z } from "zod";
+import { date, z } from "zod";
 
 export const adminSchema = z.object({
   id: z.number().int(),
   username: z.string().min(2, "Username must be at least 2 characters."),
   password: z.string().min(2, "Password must be at least 2 characters."),
   email: z.string().email("Invalid email format"),
-//   createdAt: z.date(),
-//   updatedAt: z.date(),
+
 });
 
 export type AdminSchema = z.infer<typeof adminSchema>;
@@ -51,3 +50,14 @@ export const memberSchema = z.object({
 
 // Define TypeScript type based on the Zod schema
 export type memberSchemaType = z.infer<typeof memberSchema>;
+
+export const expenseSchema = z.object({
+  id: z.coerce.number().positive().optional(),
+  description: z.string().optional(),
+  amount: z.coerce.number(),
+  date: z.coerce.date(),
+  adminId: z.string().optional(),
+
+})
+
+export type expenseSchemaType = z.infer<typeof expenseSchema>;

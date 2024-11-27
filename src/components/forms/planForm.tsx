@@ -15,6 +15,9 @@ function PlanForm() {
 
   const onSubmit = (data: Plan) => {
     createPlan({data});
+     setTimeout(() => {
+         window.location.reload(); // Refresh the page to load new data
+      }, 1000);
     // console.log(data);
     // Handle form submission, e.g., send data to an API or save in a database
   };

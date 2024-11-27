@@ -12,6 +12,7 @@ model Admin {
   email     String      @unique
   members   Member[]
   plans     Plan[]
+  expenses  Expense[]
 }
 
 model Member {
@@ -73,6 +74,8 @@ model Expense {
   description String?
   amount      Float
   date        DateTime  @default(now())
+  adminId      String?
+  admin        Admin?   @relation(fields: [adminId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
  
@@ -121,19 +124,3 @@ enum AttendanceStatus {
   ABSENT
 }
 
-
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-}
-
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
-}
