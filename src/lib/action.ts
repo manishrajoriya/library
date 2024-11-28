@@ -6,49 +6,145 @@ import prisma from "./prisma";
 
 import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
+import { Prisma } from "@prisma/client";
 
 
 
 
 
-export async function createMember({data}: {data: z.infer<typeof memberSchema>}) {
+// export async function createMember({data}: {data: z.infer<typeof memberSchema>}) {
     
-  try {
-    // Validate the data using zod schema
-    const {userId} =await auth()
-    
-    const admin = await prisma.admin.findUnique({
-      where: {
-        id: userId!
-      },
-    })
-    // Insert the validated data into the database using Prisma
-    const newMember = await prisma.member.create({
+//   try {
+//     // Validate the data using zod schema
+//     const {userId} =await auth()
+//     if (!userId) {
       
+//     }
+//     const admin = await prisma.admin.findUnique({
+//       where: {
+//         id: userId!
+//       },
+//     })
+//     // Insert the validated data into the database using Prisma
+//     const newMember = await prisma.member.create({
+      
+//       data: {
+//         admin: { connect: { id: admin?.id} },
+//         name: data.name,
+//         address: data?.address,
+//         contactNumber: data.contactNumber,
+//         email: data?.email,
+//         addmissionDate: data.addmissionDate,
+//         expiryDate: data.expiryDate,
+//         status: data.status,
+//         seatNumber: data?.seatNumber,
+//         profileImage: data?.profileImage,
+//         dueAmount: data?.dueAmount,
+//         totalAmount: data?.totalAmount,
+//         amountPaid: data?.amountPaid,
+//         plan: { connect: { id: data?.planId } },
+//       },
+//     });
+//    console.log(newMember);
+//     return newMember;
+//   } catch (error) {
+//     console.error("Failed to create member:", error);
+//     throw error;
+//   }
+// }
+
+
+export async function createMember({ data }: { data: z.infer<typeof memberSchema> }) {
+  try {
+    // Authenticate the user
+    const { userId } = await auth();
+    if (!userId) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
+    // Check if the admin exists
+    const admin = await prisma.admin.findUnique({
+      where: { id: userId },
+    });
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin not found",
+      }
+    }
+   
+    // Validate plan ID (optional: if planId is required)
+    const planExists = await prisma.plan.findUnique({
+      where: { id: data?.planId },
+    });
+
+    if (!planExists) {
+      return {
+        success: false,
+        message: "Plan does not exist",
+      }
+    }
+    const validatedData = memberSchema.parse(data);
+   
+    // Insert data into the database
+    const newMember = await prisma.member.create({
       data: {
-        admin: { connect: { id: admin?.id} },
-        name: data.name,
-        address: data?.address,
-        contactNumber: data.contactNumber,
-        email: data?.email,
-        addmissionDate: data.addmissionDate,
-        expiryDate: data.expiryDate,
-        status: data.status,
-        seatNumber: data?.seatNumber,
-        profileImage: data?.profileImage,
-        dueAmount: data?.dueAmount,
-        totalAmount: data?.totalAmount,
-        amountPaid: data?.amountPaid,
+        admin: { connect: { id: admin.id } },
+        name: validatedData.name,
+        address:  validatedData?.address,
+        contactNumber: validatedData?.contactNumber || "",
+        email: validatedData?.email,
+        addmissionDate: validatedData.addmissionDate,
+        expiryDate: validatedData.expiryDate,
+        status: validatedData.status,
+        seatNumber: validatedData?.seatNumber,
+        profileImage: validatedData?.profileImage,
+        dueAmount: validatedData?.dueAmount,
+        totalAmount: validatedData?.totalAmount,
+        amountPaid: validatedData?.amountPaid,
         plan: { connect: { id: data?.planId } },
       },
     });
-   console.log(newMember);
-    return newMember;
-  } catch (error) {
-    console.error("Failed to create member:", error);
-    throw error;
+
+    console.log("Member created successfully:", newMember);
+    return {
+      success: true,
+      member: newMember,
+      message: "Member created successfully",
+    };
+
+  } catch (error: any) {
+    console.error("Error creating member:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        message: error.errors[0].message,
+      }
+    }
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return {
+        success: false,
+        message: error.message,
+      }
+    }
+    if (error.code === "P2002") {
+      // Prisma unique constraint violation error
+      return {
+        success: false,
+        error: "A member with this email already exists.",
+      };
+    }
+
+    return {
+      success: false,
+      message: error.message || "Unknown error occurred",
+    }
   }
 }
+
 
 export async function deleteMember({ id }: { id: number }) {
   try {
@@ -247,7 +343,57 @@ export async function paidAmountCount() {
   }
 }
 
+export async function getSeatNumber() {
+  try {
+    const {userId} =await auth()
+    if (!userId) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
 
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id: userId
+      }
+    })
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin not found",
+      }
+    }
+
+    const occupiedSeats = await prisma.member.findMany({
+      where: {
+        seatNumber: {
+          not: null // Only consider members with an assigned seat number
+        },
+        status: 'LIVE',
+      },
+      select: {
+        seatNumber: true
+      },
+      
+    })
+    // Extract seat numbers into an array
+    const occupiedSeatNumbers = occupiedSeats.map((member) => member.seatNumber);
+    const maxSeats = 100; // Change this to your maximum seat capacity
+    const allSeats = Array.from({ length: maxSeats }, (_, i) => i + 1);
+     const availableSeat = allSeats.find((seat) => !occupiedSeatNumbers.includes(seat)) ;
+
+     return availableSeat
+      ? { success: true, seatNumber: availableSeat }
+      : { success: false, message: 'No available seats' };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to get seat number",
+    }
+  }
+}
 
 
 export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
@@ -283,19 +429,30 @@ export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
 
 export async function getAllPlans() {
   try {
-    const {userId, redirectToSignIn} =await auth()
-    if (!userId) return redirectToSignIn()
+    const {userId} =await auth()
+    if (!userId) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
     const plans = await prisma.plan.findMany({
       where: {
         adminId: userId
       }
     });
     
-    return plans
+    return {
+      success: true,
+      plans
+    }
     
   } catch (error) {
-    console.error('Error fetching plans:', error);
-    throw new Error('Failed to fetch plans');
+    console.log("unable to get plans",error);
+    return {
+      success: false,
+      message: "Failed to get plans",
+    }
   }
 }
 
@@ -341,6 +498,50 @@ export async function updatePlan({
   }
 }
 
+export async function getPlanAmount({id}: {id: number}) {
+  try {
+    const {userId} =await auth()
+    if (!userId) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
+
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id: userId
+      }
+    })
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin not found",
+      }
+    }
+
+    const planAmount = await prisma.plan.findUnique({
+      where: {
+        adminId: userId,
+        id
+      },
+      select: {
+        amount: true
+      }
+    });
+
+    return {
+      success: true,
+      amount: planAmount
+    } 
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to get plan amount",
+    }
+  }
+}
 
 export async function createExpense({data}: {data: z.infer<typeof expenseSchema>}) {
   try {

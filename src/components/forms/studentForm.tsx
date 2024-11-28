@@ -1,22 +1,36 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createMember } from "@/lib/action";
+import { createMember, getAllPlans, getPlanAmount, getSeatNumber } from "@/lib/action";
 import { Input } from "../ui/input";
-import { memberSchema, memberSchemaType } from "@/lib/schemas";
+import { memberSchema, memberSchemaType, planSchema, planSchemaType } from "@/lib/schemas";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
+import {  useEffect, useState } from "react";
+import { set } from "zod";
 
+// type Plan = {
+//   id: number;
+//   name: string;
+// };
 type Plan = {
   id: number;
   name: string;
+  description: string | null;
+  duration: number;
+  amount: number;
+  createdAt: Date;
+  adminId: string | null;
 };
 
 type PlanFormProps = {
-  plans: Plan[];
+  plans: planSchemaType[];
 };
 
-export default function MemberForm({ plans }: PlanFormProps) {
+export default function MemberForm() {
+  const [seatNumber, setSeatNumber] = useState( 0 );
+  const [amount, setAmount] = useState( {amount:0} );
+  const [plan, setPlan] = useState<Plan[]>([]);
   const {
     register,
     handleSubmit,
@@ -25,15 +39,57 @@ export default function MemberForm({ plans }: PlanFormProps) {
     resolver: zodResolver(memberSchema),
   });
 
-  const onSubmit = (data: memberSchemaType) => {
-    createMember({ data });
-    if (errors) {
-      toast.error("Error in adding member");
-      console.log(errors);
-    } else {
-      toast.success("Member added successfully");
-    }
+  const onSubmit = async (data: memberSchemaType) => {
+   const response = await createMember( {data} );
+   if (!response.success) {
+     toast.error("Failed to create member. Please try again.");
+     console.log(response.message);
+     
+   }else {
+     toast.success("Member created successfully!");
+   }
   };
+
+  
+
+  const checkSeatNumber = async () => {
+    const response = await getSeatNumber();
+    if (!response.success) {
+      toast.error("Failed to get seat number. Please try again.");
+      console.log(response.message);
+    }else {
+      console.log("seat number",response.seatNumber);
+      setSeatNumber(response.seatNumber!);
+    }
+  }
+
+  const checkPlan = async () => {
+    const response = await getAllPlans();
+    if (!response.success) {
+      toast.error("Failed to get plan. Please try again.");
+      console.log(response.message);
+    }else {
+      console.log("plan",response.plans);
+      setPlan(response.plans!);
+    }
+  }
+
+  const checkPlanAmount = async (id:number) => {
+    const response = await getPlanAmount({id});
+    if (!response.success) {
+      toast.error("Failed to get seat number. Please try again.");
+      console.log(response.message);
+    }else {
+      console.log("amount",response.amount);
+      setAmount(response.amount!);
+    }
+  }
+
+  useEffect(() => {
+    checkSeatNumber();
+    checkPlan();
+  },[]);
+  
 
   return (
     <div className="flex justify-center w-full px-4 sm:w-1/2">
@@ -110,10 +166,11 @@ export default function MemberForm({ plans }: PlanFormProps) {
             {...register("planId", { valueAsNumber: true })}
             className="input h-10"
             required
+           
+            onChange={(e) => checkPlanAmount(Number(e.target.value))}
           >
-            <option value="">Select Plan</option>
-            {plans.map((plan) => (
-              <option key={plan.id} value={plan.id}>
+            {plan.map((plan) => (
+              <option key={plan.id} value={plan.id} >
                 {plan.name}
               </option>
             ))}
@@ -143,6 +200,7 @@ export default function MemberForm({ plans }: PlanFormProps) {
             </label>
             <Input
               type="date"
+              required
               defaultValue={new Date(
                 Date.now() + 30 * 24 * 60 * 60 * 1000
               ).toISOString().split("T")[0]}
@@ -171,6 +229,7 @@ export default function MemberForm({ plans }: PlanFormProps) {
             {...register("seatNumber")}
             placeholder="Seat Number"
             className="input"
+            defaultValue={seatNumber}
             required
           />
         </div>
@@ -185,6 +244,7 @@ export default function MemberForm({ plans }: PlanFormProps) {
               {...register("totalAmount")}
               placeholder="Total Amount"
               className="input"
+              defaultValue={amount.amount? amount.amount : plan.map((plan) => plan.amount)[0]}
               required
             />
           </div>

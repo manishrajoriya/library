@@ -20,8 +20,8 @@ model Member {
   id           Int              @id @default(autoincrement())
   name         String
   address      String?
-  contactNumber String
-  email        String?          @unique
+  contactNumber String?
+  email        String?         
   addmissionDate DateTime
   expiryDate   DateTime
   status       MemberStatus     @default(LIVE)
@@ -29,7 +29,7 @@ model Member {
   reminders    Reminder[]
   followUps    FollowUp[]
   attendance   Attendance[]
-  seatNumber   Int?
+  seatNumber   Int?             @unique
   plan         Plan?            @relation(fields: [planId], references: [id])
   planId       Int?
   amountPaid  Float?

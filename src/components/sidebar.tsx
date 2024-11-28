@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { GridBackgroundDemo } from "./gridbg";
 
 
 export function SidebarDemo({ children }: { children: React.ReactNode }) {
@@ -101,6 +102,7 @@ export const Logo = () => (
 
 // Dashboard Component Accepting Children
 const Dashboard = ({ children }: { children: React.ReactNode }) => (
+  
   <div className="flex flex-1 h-full">
     <div className="flex flex-col flex-1 w-full h-full overflow-y-auto bg-white dark:bg-neutral-900">
       <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 flex flex-col gap-2 flex-1">
@@ -117,4 +119,5 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => (
       </div>
     </div>
   </div>
+  
 );

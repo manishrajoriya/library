@@ -16,6 +16,7 @@ export type AdminSchema = z.infer<typeof adminSchema>;
 
 // Define Zod schema
 export const planSchema = z.object({
+  id: z.coerce.number().positive().optional(),
   name: z.string().min(1, 'Name is required'),
   description: z.string().optional(),
   duration: z.number().positive('Duration must be a positive number'),
@@ -24,7 +25,7 @@ export const planSchema = z.object({
 });
 
 // Define TypeScript type based on Zod schema
-export type Plan = z.infer<typeof planSchema>;
+export type planSchemaType = z.infer<typeof planSchema>;
 
 
 
@@ -33,8 +34,8 @@ export const memberSchema = z.object({
   id: z.coerce.number().positive().optional(),
   name: z.string().min(1, 'Name is required'),
   address: z.string().optional(),
-  contactNumber: z.string().min(10, 'Contact Number is required').max(15),
-  email: z.string().optional(),
+  contactNumber: z.string().optional(),
+  email: z.string().email('Invalid email format').optional(),
   addmissionDate: z.coerce.date(), // using string for date inputs
   expiryDate: z.coerce.date(),
   totalAmount: z.coerce.number().optional(),

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Plan, planSchema } from "@/lib/schemas";
+import { planSchemaType, planSchema } from "@/lib/schemas";
 import { createPlan } from "@/lib/action";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -14,11 +14,11 @@ function PlanForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Plan>({
+  } = useForm<planSchemaType>({
     resolver: zodResolver(planSchema),
   });
 
-  const onSubmit = (data: Plan) => {
+  const onSubmit = (data: planSchemaType) => {
     createPlan({ data });
     setTimeout(() => {
       window.location.reload(); // Refresh the page to load new data
