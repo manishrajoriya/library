@@ -15,11 +15,11 @@ export async function createMember({data}: {data: z.infer<typeof memberSchema>})
     
   try {
     // Validate the data using zod schema
-    const {userId, redirectToSignIn} =await auth()
-    if (!userId) return redirectToSignIn()
+    const {userId} =await auth()
+    
     const admin = await prisma.admin.findUnique({
       where: {
-        id: userId
+        id: userId!
       },
     })
     // Insert the validated data into the database using Prisma
@@ -104,15 +104,23 @@ export async function updateMember({
 
 export async function getAllMembers() {
   try {
-     const {userId, redirectToSignIn} =await auth()
-     
-     
+    const ITEM_PER_PAGE = 10
+    
+    const {userId, redirectToSignIn} =await auth()
     if (!userId) return redirectToSignIn()
     const members = await prisma.member.findMany({
       
       where: {
         adminId: userId
-      }
+      },
+      include: {
+        plan: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: ITEM_PER_PAGE,
+      
     });
     console.log('Fetched members:', members);
     return members

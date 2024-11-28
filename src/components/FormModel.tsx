@@ -11,17 +11,15 @@ export default async function MemberFormModal() {
         const plans = await getAllPlans()
     return (
         <div >
-                <MemberForm plans={plans} />
+         <MemberForm plans={plans} />
         </div>
     )
 }
 
 export async function DataCardList() {
  
-  
     const members = await getAllMembers();
-    
-    
+
     return (
         <div>
             {members.map((member:{id:number,
@@ -35,7 +33,7 @@ export async function DataCardList() {
               amountPaid:number| null,
               dueAmount:number| null,
               status:"LIVE" | "EXPIRED",
-                      
+              plan:{name:string}| null        
             }) => (
                 <div key={member.id}>
                     <DataCard 
@@ -45,7 +43,7 @@ export async function DataCardList() {
                         addmissionDate={member.addmissionDate} 
                         expiryDate={member.expiryDate} 
                         seatNumber={member.seatNumber || 0}
-                        // plan={member.plan?.name || ''}
+                        plan={member.plan?.name || ''}
                         totalAmount={member.totalAmount || 0}
                         amountPaid={member.amountPaid || 0}
                         dueAmount={member.dueAmount || 0}
