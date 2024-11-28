@@ -6,7 +6,7 @@ import prisma from "./prisma";
 
 import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
-import exp from "constants";
+
 
 
 
@@ -419,6 +419,26 @@ export async function updateExpense({
     return updatedExpense;
   } catch (error) {
     console.error("Failed to update expense:", error);
+    throw error;
+  }
+}
+
+export async function ExpensesCount() {
+  try {
+    const {userId, redirectToSignIn} =await auth()
+    if (!userId) return redirectToSignIn()
+    const result = await prisma.expense.aggregate({
+      where: {
+        adminId: userId,
+      },
+      _sum: {
+        amount: true
+      }
+    });
+    const Count = result._sum.amount || 0;
+    return Count
+  } catch (error) { 
+    console.error("Failed to count expenses:", error);
     throw error;
   }
 }

@@ -4,7 +4,8 @@ import { countMembers,
     inactiveMembersCount,
     totalAmountCount, 
     dueAmountCount,
-    paidAmountCount
+    paidAmountCount,
+    ExpensesCount
   } from "@/lib/action";
 
 export  async function TotalMembers() {
@@ -66,4 +67,21 @@ export async function InactiveMemberCard() {
     )
 }
 
+export async function ExpenseCountCard() {
+   const Count = await ExpensesCount();
+    return (
+       <button title="Total Expense" >
+        <UserCard logo="/p&l.png" title="Total Expense" count={Count } />
+       </button>
+    )
+}
 
+export async function PLCard() {
+   const Count = await ExpensesCount();
+   const total = await totalAmountCount();
+    return (
+       <button title="profit and loss" >
+        <UserCard logo="/p&l.png" title="P&L" count={total - Count } />
+       </button>
+    )
+}

@@ -4,6 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Plan, planSchema } from '@/lib/schemas';
 import { createPlan } from '@/lib/action';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Textarea } from '../ui/textarea';
 
 
 
@@ -18,26 +21,25 @@ function PlanForm() {
      setTimeout(() => {
          window.location.reload(); // Refresh the page to load new data
       }, 1000);
-    // console.log(data);
-    // Handle form submission, e.g., send data to an API or save in a database
+    
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input
+        <Input
           type="text"
           {...register('name')}
           className="input"
-          placeholder="Plan Name"
+          placeholder="Shift Name"
         />
         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Description</label>
-        <textarea
+        <Textarea
           {...register('description')}
           className="input"
           placeholder="Optional description"
@@ -47,7 +49,7 @@ function PlanForm() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Duration (in days)</label>
-        <input
+        <Input
           type="number"
           {...register('duration', { valueAsNumber: true })}
           className="input"
@@ -58,31 +60,18 @@ function PlanForm() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Amount</label>
-        <input
+        <Input
           type="number"
           step="100"
           {...register('amount', { valueAsNumber: true })}
-          className="input"
           placeholder="Amount"
         />
         {errors.amount && <p className="text-red-500">{errors.amount.message}</p>}
       </div>
 
-      {/* <div>
-        <label className="block text-sm font-medium text-gray-700">Members</label>
-        <input
-          
-          type="text"
-          {...register('members')}
-          className="input"
-          placeholder="Add members (based on your Member structure)"
-        />
-        {errors.members && <p className="text-red-500">{errors.members.message}</p>}
-      </div> */}
-
-      <button type="submit" className="btn-primary">
+      <Button type="submit" variant={'default'}>
         Submit
-      </button>
+      </Button>
     </form>
   );
 }

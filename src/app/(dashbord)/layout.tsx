@@ -21,17 +21,17 @@ export default function DashboardLayout({ children }:  Readonly<{
           <Image width={100} height={100} src="/sms.png" alt="Logo" className="h-8" />
         </div>
         <nav className="mt-5">
-          <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+          <a href="/User" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
             <FiHome className="mr-2" /> Dashboard
           </a>
-          <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
-            <FiUser className="mr-2" /> Team
+          <a href="/addmember" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+            <FiUser className="mr-2" /> Add Member
           </a>
           <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
             <FiFolder className="mr-2" /> Projects
           </a>
-          <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
-            <FiCalendar className="mr-2" /> Calendar
+          <a href="/plans" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+            <FiCalendar className="mr-2" /> Shifts
           </a>
           <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
             <FiFileText className="mr-2" /> Documents

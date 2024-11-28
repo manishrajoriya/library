@@ -87,15 +87,8 @@ function DataCard({
   </div>
 
   {/* <!-- Action Buttons --> */}
-  {/* <div className="mt-4 flex justify-around text-red-500 text-sm">
-    <button className="flex flex-col items-center">
-      <span>👤</span>
-      <span>Profile</span>
-    </button>
-    <button className="flex flex-col items-center">
-      <span>🆔</span>
-      <span>ID-Card</span>
-    </button>
+   <div className="mt-4 flex justify-around text-gray-600 text-sm">
+    
     <button className="flex flex-col items-center">
       <span>✏️</span>
       <span>Edit</span>
@@ -112,7 +105,7 @@ function DataCard({
       <span>🧾</span>
       <span>Add Bill</span>
     </button>
-  </div> */}
+  </div>
 </div>
 
     </div>

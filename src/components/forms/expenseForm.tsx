@@ -4,8 +4,10 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { expenseSchema, expenseSchemaType } from "@/lib/schemas";
-import { createExpense } from "@/lib/action";
-import { Router } from "next/router";
+import { createExpense, deleteExpense, updateExpense } from "@/lib/action";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import toast from "react-hot-toast";
 
 
 const ExpenseForm: React.FC = () => {
@@ -20,6 +22,7 @@ const ExpenseForm: React.FC = () => {
   const onSubmit = (data: expenseSchemaType) => {
     console.log("Form Submitted:", data);
     createExpense({ data });
+    toast.success("Amount added successfully");
     setTimeout(() => {
          window.location.reload(); // Refresh the page to load new data
       }, 1000);
@@ -32,7 +35,7 @@ const ExpenseForm: React.FC = () => {
         <label htmlFor="amount" className="block text-sm font-medium">
           Amount
         </label>
-        <input
+        <Input
           id="amount"
           type="number"
           step="0.01"
@@ -49,7 +52,7 @@ const ExpenseForm: React.FC = () => {
         <label htmlFor="description" className="block text-sm font-medium">
           Description
         </label>
-        <input
+        <Input
           id="description"
           type="text"
           {...register("description")}
@@ -67,7 +70,7 @@ const ExpenseForm: React.FC = () => {
         <label htmlFor="date" className="block text-sm font-medium">
           Date
         </label>
-        <input
+        <Input
           id="date"
           type="date"
           defaultValue={new Date().toISOString().split("T")[0]}
@@ -81,13 +84,11 @@ const ExpenseForm: React.FC = () => {
 
       {/* Submit Button */}
       <div>
-        <button
+        <Button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          
         >
           Submit
-        </button>
+        </Button>
       </div>
     </form>
   );

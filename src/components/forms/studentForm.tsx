@@ -2,9 +2,11 @@
 import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createMember } from '@/lib/action';
+import { createMember, updateMember, deleteMember } from '@/lib/action';
 import { Input } from '../ui/input';
 import { memberSchema, memberSchemaType } from '@/lib/schemas';
+import { Button } from '../ui/button';
+import toast from 'react-hot-toast';
 
 
 type Plan = {
@@ -28,11 +30,16 @@ export default  function MemberForm({plans}: PlanFormProps) {
   const onSubmit = (data: memberSchemaType) => {
     
     createMember({data});
-    //  setTimeout(() => {
-    //      window.location.reload(); // Refresh the page to load new data
-    //   }, 1000);
-    // console.log(data);
-    // Handle form submission, e.g., send data to an API or save in a database
+    if (errors) {
+      toast.error("Error in adding member");
+      return console.log(errors);
+    }else{
+      toast.success("Member added successfully");
+      setTimeout(() => {
+         window.location.reload(); // Refresh the page to load new data
+      }, 1000);
+    }
+    
   };
 
   return (
@@ -81,6 +88,22 @@ export default  function MemberForm({plans}: PlanFormProps) {
         {errors.email && <p className="text-red-500">{errors.email.message}</p>}
       </div>
 
+       <div>
+        <label className="block text-sm font-medium text-gray-700">Plan</label>
+        <select
+          {...register('planId', { valueAsNumber: true })} // Register as a number
+          className="input h-9 w-full px-3 py-1 rounded-md outline-1"
+        >
+          <option value="" >Select Plan</option>
+          {plans.map((plan) => (
+            <option  key={plan.id} value={plan.id}>
+              {plan.name}
+            </option>
+          ))}
+        </select>
+        {errors.planId && <p className="text-red-500">{errors.planId.message}</p>}
+      </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-700">Admission Date</label>
         <Input
@@ -126,6 +149,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
         <label className="block text-sm font-medium text-gray-700">Total Amount</label>
         <Input
           type="number"
+          
           {...register('totalAmount')}
           className="input"
           placeholder="Total Amount"
@@ -155,21 +179,7 @@ export default  function MemberForm({plans}: PlanFormProps) {
         {errors.dueAmount && <p className="text-red-500">{errors.dueAmount.message}</p>}
       </div>
 
-     <div>
-        <label className="block text-sm font-medium text-gray-700">Plan</label>
-        <select
-          {...register('planId', { valueAsNumber: true })} // Register as a number
-          className="input h-9 w-full px-3 py-1 rounded-md outline-1"
-        >
-          <option value="" >Select Plan</option>
-          {plans.map((plan) => (
-            <option  key={plan.id} value={plan.id}>
-              {plan.name}
-            </option>
-          ))}
-        </select>
-        {errors.planId && <p className="text-red-500">{errors.planId.message}</p>}
-      </div>
+    
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Profile Image URL</label>
@@ -183,9 +193,9 @@ export default  function MemberForm({plans}: PlanFormProps) {
         {errors.profileImage && <p className="text-red-500">{errors.profileImage.message}</p>}
       </div>
 
-      <button type="submit" className="btn-primary">
+      <Button type="submit" >
         Submit
-      </button>
+      </Button>
     </form>
     </div>
   );
