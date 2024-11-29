@@ -1,13 +1,13 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createMember, getAllPlans, getPlanAmount, getSeatNumber } from "@/lib/action";
+import { createMember, getAllPlans, getPlanAmount, getSeatNumber, uploadOnCloudinary } from "@/lib/action";
 import { Input } from "../ui/input";
 import { memberSchema, memberSchemaType, planSchema, planSchemaType } from "@/lib/schemas";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
 import {  useEffect, useState } from "react";
-import { set } from "zod";
+import { CldUploadWidget } from 'next-cloudinary';
 
 // type Plan = {
 //   id: number;
@@ -31,6 +31,7 @@ export default function MemberForm() {
   const [seatNumber, setSeatNumber] = useState( 0 );
   const [amount, setAmount] = useState( {amount:0} );
   const [plan, setPlan] = useState<Plan[]>([]);
+  const [profileImage, setProfileImage] = useState();
   const {
     register,
     handleSubmit,
@@ -40,6 +41,7 @@ export default function MemberForm() {
   });
 
   const onSubmit = async (data: memberSchemaType) => {
+    
    const response = await createMember( {data} );
    if (!response.success) {
      toast.error("Failed to create member. Please try again.");
@@ -48,9 +50,27 @@ export default function MemberForm() {
    }else {
      toast.success("Member created successfully!");
    }
+
   };
 
-  
+  // const uploadFile = async (file: File) => {
+    
+  //   if (!file) {
+  //     console.error("No file selected");
+  //     toast.error("No file selected");
+  //     return;
+  //   }
+  //     const response = await uploadOnCloudinary(file);
+  //     if (!response.success) {
+  //       toast.error("Failed to upload file. Please try again.");
+  //       console.log(response.message);
+  //       return;
+      
+  //     } else {
+  //       toast.success("File uploaded successfully!");
+  //     }
+    
+  // };
 
   const checkSeatNumber = async () => {
     const response = await getSeatNumber();
@@ -92,20 +112,20 @@ export default function MemberForm() {
   
 
   return (
-    <div className="flex justify-center w-full px-4 sm:w-1/2">
+    <div className="flex justify-center w-full  px-4 sm:w-1/2">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 bg-white p-6 shadow-md rounded-lg w-full"
       >
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-gray-700 mb-1 ">
             Name
           </label>
           <Input
             type="text"
             {...register("name")}
             placeholder="Full Name"
-            className="input"
+            className="input shadow-sm shadow-green-100"
             required
           />
           {errors.name && (
@@ -121,7 +141,7 @@ export default function MemberForm() {
             type="text"
             {...register("address")}
             placeholder="Address"
-            className="input"
+            className="input shadow-sm shadow-green-100"
           />
         </div>
 
@@ -133,7 +153,7 @@ export default function MemberForm() {
             type="text"
             {...register("contactNumber")}
             placeholder="Contact Number"
-            className="input"
+            className="input shadow-sm shadow-green-100"
             required
           />
           {errors.contactNumber && (
@@ -151,7 +171,7 @@ export default function MemberForm() {
             type="email"
             {...register("email")}
             placeholder="Email"
-            className="input"
+            className="input shadow-sm shadow-green-100"
           />
           {errors.email && (
             <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
@@ -189,7 +209,7 @@ export default function MemberForm() {
               type="date"
               defaultValue={new Date().toISOString().split("T")[0]}
               {...register("addmissionDate")}
-              className="input"
+              className="input shadow-sm shadow-green-100"
               required
             />
           </div>
@@ -205,7 +225,7 @@ export default function MemberForm() {
                 Date.now() + 30 * 24 * 60 * 60 * 1000
               ).toISOString().split("T")[0]}
               {...register("expiryDate")}
-              className="input"
+              className="input shadow-sm shadow-green-100"
             />
           </div>
         </div>
@@ -228,7 +248,7 @@ export default function MemberForm() {
             type="number"
             {...register("seatNumber")}
             placeholder="Seat Number"
-            className="input"
+            className="input shadow-sm shadow-green-100"
             defaultValue={seatNumber}
             required
           />
@@ -243,9 +263,10 @@ export default function MemberForm() {
               type="number"
               {...register("totalAmount")}
               placeholder="Total Amount"
-              className="input"
+              className="input shadow-sm shadow-green-100"
               defaultValue={amount.amount? amount.amount : plan.map((plan) => plan.amount)[0]}
               required
+              readOnly
             />
           </div>
 
@@ -257,7 +278,7 @@ export default function MemberForm() {
               type="number"
               {...register("amountPaid")}
               placeholder="Paid Amount"
-              className="input"
+              className="input shadow-sm shadow-green-100"
             />
           </div>
 
@@ -269,7 +290,7 @@ export default function MemberForm() {
               type="number"
               {...register("dueAmount")}
               placeholder="Due Amount"
-              className="input"
+              className="input shadow-sm shadow-green-100"
             />
           </div>
         </div>
@@ -279,11 +300,13 @@ export default function MemberForm() {
             Profile Image URL
           </label>
           <Input
-            type="url"
+            type="file"
             {...register("profileImage")}
             placeholder="Profile Image URL"
-            className="input"
+            className="input shadow-sm shadow-green-100"
+          
           />
+        
         </div>
 
         <Button type="submit" className="w-full">
@@ -293,3 +316,5 @@ export default function MemberForm() {
     </div>
   );
 }
+
+

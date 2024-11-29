@@ -7,7 +7,7 @@ import prisma from "./prisma";
 import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
 import { Prisma } from "@prisma/client";
-
+import { v2 as cloudinary } from 'cloudinary';
 
 
 
@@ -653,3 +653,46 @@ export async function ExpensesCount() {
 }
 
 
+export async function uploadOnCloudinary(file: File) {
+  try {
+     cloudinary.config({ 
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+        api_key: process.env.CLOUDINARY_API_KEY, 
+        api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+    });
+    if (!cloudinary.config().cloud_name || !cloudinary.config().api_key || !cloudinary.config().api_secret) {
+      return {
+        success: false,
+        message: "Cloudinary configuration is missing",
+      }
+    }
+    interface CloudinaryUploadResult {
+    public_id: string;
+    [key: string]: any
+}
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+    const result = await new Promise<CloudinaryUploadResult>(
+            (resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {folder: "next-cloudinary-uploads"},
+                    (error, result) => {
+                        if(error) reject(error);
+                        else resolve(result as CloudinaryUploadResult);
+                    }
+                )
+                uploadStream.end(buffer)
+            }
+        )
+    console.log(result);
+    return{
+      success: true,
+      url: result.public_id
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to upload image",
+    }
+  }
+}

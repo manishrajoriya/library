@@ -1,3 +1,4 @@
+import { FloatingDockDemo } from '@/components/floatingDock'
 import { GridBackgroundDemo } from '@/components/gridbg'
 import { SidebarDemo } from '@/components/sidebar'
 import React from 'react'
@@ -7,6 +8,7 @@ function layout({ children }: { children: React.ReactNode }) {
     <div>
       
       <SidebarDemo>
+        <FloatingDockDemo />
         {children}
         </SidebarDemo>
       

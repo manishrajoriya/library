@@ -24,8 +24,7 @@ export default function page() {
        <DueAmountCard/>
        <PLCard/>
        <ExpenseCountCard/>
-       <UserCard logo='/sms.png' title='Message' count={3}/>
-       <AddMemberCard/>
+       
    </div>
    </div>
   )
