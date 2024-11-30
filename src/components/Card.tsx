@@ -1,36 +1,27 @@
 import Image from "next/image";
+import { Card } from "./ui/card";
 
 type UserCardProps = {
-  logo: string;
+  logo: React.ReactNode;
   title: string;
   count: number;
+  className?: string;
 };
 
-const UserCard = ({ logo, title, count }: UserCardProps) => {
+const UserCard = ({ logo, title, count, className }: UserCardProps) => {
   return (
     <div className="p-2">
-      <div className="relative h-32 w-32 sm:h-40 sm:w-40 bg-white dark:bg-neutral-900 shadow-custom shadow-green-100  rounded-lg p-4 border border-gray-200 dark:border-neutral-700">
-        {/* Logo Section */}
-        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full overflow-hidden mb-2">
-          <Image
-            width={100}
-            height={100}
-            src={logo}
-            alt={`${title} Logo`}
-            className="object-cover w-full h-full"
-          />
+     <Card className={`p-6 transition-all hover:scale-105 ${className} backdrop-blur-xl bg-opacity-95 border-none shadow-lg`}>
+      <div className="flex items-center gap-4">
+        <div className="p-3 rounded-xl bg-white shadow-sm">
+          {logo}
         </div>
-
-        {/* Title */}
-        <h3 className="text-center text-sm sm:text-base text-gray-800 dark:text-gray-200 font-semibold mb-1">
-          {title}
-        </h3>
-
-        {/* Count */}
-        <p className="text-center text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
-          {count}
-        </p>
+        <div>
+          <p className="text-sm font-medium text-gray-600">{title}</p>
+          <h3 className="text-2xl font-semibold mt-1">{count}</h3>
+        </div>
       </div>
+    </Card>
     </div>
   );
 };

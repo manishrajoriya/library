@@ -43,6 +43,6 @@ try {
     return NextResponse.json({public_id: result.public_id,url: result.url})
 } catch (error) {
   console.log("error in uploading file");
-  // throw new Error("error in uploading file");
+   throw new Error("error in uploading file");
 }
 }

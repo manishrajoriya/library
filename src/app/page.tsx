@@ -1,99 +1,89 @@
-import { UserButton } from '@clerk/nextjs';
-import Link from 'next/link';
-import React from 'react';
+import Link from 'next/link'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { BookOpen, Users, Calendar, Award, ArrowRight } from 'lucide-react'
 
-const HomePage = () => {
-  
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-800 to-black text-white">
-      {/* Header */}
-      <header className="flex justify-between items-center p-4 bg-transparent">
-        <div className="text-2xl font-bold">G</div>
-        <button type="button" className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-          Discuss Your Idea
-        </button>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, rgb(25, 118, 210) 0%, rgb(81, 45, 168) 100%)' }}>
+      <header className="p-6 flex justify-between items-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}>
+        <div className="text-white font-bold text-2xl">StudyBuddy</div>
+        <nav>
+          <ul className="flex space-x-4">
+            <li><Link href="#features" className="text-white hover:text-yellow-300 transition">Features</Link></li>
+            <li><Link href="#" className="text-white hover:text-yellow-300 transition">Pricing</Link></li>
+            <li><Link href="#" className="text-white hover:text-yellow-300 transition">Contact</Link></li>
+          </ul>
+        </nav>
       </header>
 
-      {/* Hero Section */}
-      <section className="flex flex-col items-center text-center py-16">
-        <div className="bg-purple-700 p-4 rounded-full mb-4">
-          <span className="text-4xl font-bold"><UserButton/></span>
-        </div>
-        <h1 className="text-4xl font-extrabold mb-4">
-          We develop your app idea MVP in 80 hours
-        </h1>
-        <p className="max-w-md mb-6">
-          Receive a fully functional mobile app in only 80 hours.
-        </p>
-        <Link href="/User">
-        <button type="button" className="bg-blue-600 px-6 py-3 rounded-lg">
-          Discuss Your Idea
-        </button>
-        </Link>
-      </section>
+      <main className="container mx-auto px-4 py-16">
+        <section className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-white mb-4">Manage Your Studies with Ease</h1>
+          <p className="text-xl text-white mb-8">Organize, track, and excel in your academic journey</p>
+          <Button size="lg" style={{ backgroundColor: 'rgb(255, 193, 7)', color: 'rgb(0, 0, 0)' }} className="hover:opacity-90">
+            Get Started <ArrowRight className="ml-2" />
+          </Button>
+        </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gradient-to-b from-purple-900 to-purple-700">
-        <h2 className="text-center text-3xl font-bold mb-12">
-          App Genie Helps You to Grow Faster
-        </h2>
-        <div className="flex flex-col md:flex-row justify-center space-y-8 md:space-y-0 md:space-x-8">
-          <FeatureCard
-            title="Mobile App Development"
-            description="Crafting Exceptional Mobile Experiences"
-            detail="Delivering tailored mobile apps to enhance your brand and engage customers."
-            icon="📱"
+        <section id="features" className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <FeatureCard 
+            icon={<BookOpen className="h-12 w-12" style={{ color: 'rgb(255, 87, 34)' }} />}
+            title="Course Management"
+            description="Easily organize and access all your course materials in one place."
+            bgColor="rgb(255, 235, 238)"
           />
-          <FeatureCard
-            title="AI Solutions"
-            description="Empowering Businesses with AI"
-            detail="Drive growth with AI—automate processes, gain insights, and personalize experiences."
-            icon="🤖"
+          <FeatureCard 
+            icon={<Users className="h-12 w-12" style={{ color: 'rgb(76, 175, 80)' }} />}
+            title="Collaboration Tools"
+            description="Connect with classmates for group projects and study sessions."
+            bgColor="rgb(232, 245, 233)"
           />
-          <FeatureCard
-            title="Design Services"
-            description="Designing Intuitive Digital Experiences"
-            detail="Creating user-centric designs that captivate and convert your audience smoothly."
-            icon="🎨"
+          <FeatureCard 
+            icon={<Calendar className="h-12 w-12" style={{ color: 'rgb(3, 169, 244)' }} />}
+            title="Schedule Planner"
+            description="Keep track of classes, assignments, and exams with our intuitive calendar."
+            bgColor="rgb(227, 242, 253)"
           />
-        </div>
-      </section>
+          <FeatureCard 
+            icon={<Award className="h-12 w-12" style={{ color: 'rgb(156, 39, 176)' }} />}
+            title="Progress Tracking"
+            description="Monitor your academic progress and celebrate your achievements."
+            bgColor="rgb(243, 229, 245)"
+          />
+        </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-16 text-center">
-        <h2 className="text-3xl font-bold mb-8">Why Choose Us?</h2>
-        <p className="max-w-md mx-auto mb-12">
-          You do not need a development team. You need a partner who works with you.
-        </p>
-        <div className="flex justify-center">
-          <WhyChooseUsGraphic />
+        <section className="text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Ready to Boost Your Academic Success?</h2>
+          <p className="text-xl text-white mb-8">Join thousands of students already using StudyBuddy</p>
+          <Button size="lg" style={{ backgroundColor: 'rgb(0, 230, 118)', color: 'rgb(0, 0, 0)' }} className="hover:opacity-90">
+            Sign Up Now
+          </Button>
+        </section>
+      </main>
+
+      <footer className="text-white py-8 mt-16" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2024 StudyBuddy. All rights reserved.</p>
         </div>
-        <ul className="mt-8 space-y-4 text-left max-w-2xl mx-auto">
-          <li><strong>Agile:</strong> Our youthful team brings fresh perspectives...</li>
-          <li><strong>Collaboration:</strong> We value teamwork and open communication...</li>
-          <li><strong>Customer Focus:</strong> We prioritize your success...</li>
-        </ul>
-      </section>
+      </footer>
     </div>
-  );
-};
+  )
+}
 
-// Feature Card Component
-const FeatureCard = ({ title, description, detail, icon }:{title: string, description: string, detail: string, icon: string}) => (
-  <div className="bg-purple-800 p-6 rounded-lg max-w-xs text-center mx-auto">
-    <div className="text-4xl">{icon}</div>
-    <h3 className="text-2xl font-bold mt-4">{title}</h3>
-    <p className="mt-2 text-purple-300">{description}</p>
-    <p className="mt-2">{detail}</p>
-  </div>
-);
+function FeatureCard({ icon, title, description, bgColor }: { icon: React.ReactNode; title: string; description: string; bgColor: string }) {
+  return (
+    <Card className="transition hover:shadow-lg" style={{ backgroundColor: bgColor }}>
+      <CardHeader>
+        <CardTitle className="flex items-center space-x-2">
+          {icon}
+          <span>{title}</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>{description}</p>
+      </CardContent>
+    </Card>
+  )
+}
 
-// Placeholder for Why Choose Us Graphic
-const WhyChooseUsGraphic = () => (
-  <div className="bg-purple-600 rounded-full p-10">
-    {/* Customize with SVG or other graphic content */}
-    <div className="text-4xl">🔒</div>
-  </div>
-);
-
-export default HomePage;
