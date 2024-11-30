@@ -202,8 +202,13 @@ export async function getAllMembers() {
   try {
     const ITEM_PER_PAGE = 10
     
-    const {userId, redirectToSignIn} =await auth()
-    if (!userId) return redirectToSignIn()
+    const {userId} =await auth()
+    if (!userId) {
+      return{
+        success: false,
+        message: "User not authenticated"
+      }
+    }
     const members = await prisma.member.findMany({
       
       where: {
@@ -219,11 +224,17 @@ export async function getAllMembers() {
       
     });
     console.log('Fetched members:', members);
-    return members
+    return {
+      success: true,
+      members: members
+    }
     
   } catch (error) {
     console.error('Error fetching members:', error);
-    throw new Error('Failed to fetch members');
+    return {
+      success: false,
+      message: "Failed to fetch members"
+    }
   }
 }
 

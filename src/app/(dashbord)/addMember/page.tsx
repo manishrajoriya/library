@@ -1,10 +1,11 @@
 import React from 'react'
-import MemberFormModal from '@/components/FormModel'
+
+import MemberForm from '@/components/forms/studentForm'
 
 function page() {
   return (
     <div>
-        <MemberFormModal/>
+        <MemberForm/>
     </div>
   )
 }

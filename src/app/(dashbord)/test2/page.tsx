@@ -1,145 +1,89 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Pencil, Plus, RefreshCw, Receipt } from 'lucide-react'
+import { Card } from "@/components/ui/card"
+import { ChevronDown, Plus, Video, Users, User, Home, Flag, Bookmark, Clock, Calendar, GamepadIcon, BarChart3, Newspaper, PlaySquare, MessageCircle } from "lucide-react"
+import Image from "next/image"
 
-interface MemberCardProps {
-  name: string
-  address: string
-  id: string
-  seatNo: string
-  contact: string
-  joinDate: string
-  endDate: string
-  plan: string
-  finalAmount: number
-  paidAmount: number
-  dueAmount: number
-  isExpired?: boolean
-}
-
-export default function MemberCard({
-  name,
-  address,
-  id,
-  seatNo,
-  contact,
-  joinDate,
-  endDate,
-  plan,
-  finalAmount,
-  paidAmount,
-  dueAmount,
-  isExpired = false,
-}: MemberCardProps) {
+export default function SocialMenu() {
   return (
-    <Card className="w-full max-w-md overflow-hidden transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-white to-gray-50/50">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16 border-2 border-white shadow-lg">
-              <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className="bg-gradient-to-br from-purple-500 to-indigo-500 text-white text-xl">
-                {name}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl font-semibold text-gray-900">{name}</h2>
-                {isExpired && (
-                  <Badge variant="destructive" className="font-semibold">
-                    EXPIRED
-                  </Badge>
-                )}
-              </div>
-              <p className="text-gray-500 mt-1">{address}</p>
+    <div className="w-full max-w-3xl mx-auto p-4 space-y-4">
+      {/* Profile Section */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative w-10 h-10">
+              <Image
+                src="/placeholder.svg"
+                alt="Profile"
+                fill
+                className="rounded-full object-cover"
+              />
             </div>
+            <span className="text-lg font-semibold">Mani Raj</span>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-600">ID: {id}</p>
-            <p className="text-sm text-gray-600 mt-1">Seat No: {seatNo}</p>
-          </div>
+          <ChevronDown className="h-6 w-6 text-gray-500" />
         </div>
+      </Card>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-600">Contact Number</p>
-            <p className="text-blue-600 font-medium">{contact}</p>
+      {/* Create Profile Section */}
+      <Card className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+            <Plus className="h-6 w-6 text-gray-500" />
           </div>
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-600">Plan</p>
-            <p className="font-medium text-gray-900">{plan}</p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-600">Join Date</p>
-            <p className="font-medium text-gray-900">{joinDate}</p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-600">End Date</p>
-            <p className="font-medium text-gray-900">{endDate}</p>
-          </div>
+          <span className="text-lg">Create another profile</span>
         </div>
+      </Card>
 
-        <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Final Amt</p>
-            <p className="font-semibold text-gray-900">${finalAmount}</p>
+      {/* Switch Account Section */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative w-10 h-10">
+              <Image
+                src="/placeholder.svg"
+                alt="Switch Account"
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
+            <span className="text-lg">Switch account</span>
           </div>
-          <div className="text-center border-x border-gray-200">
-            <p className="text-sm text-gray-600 mb-1">Paid Amt</p>
-            <p className="font-semibold text-green-600">${paidAmount}</p>
-          </div>
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Due</p>
-            <Badge variant={dueAmount > 0 ? "destructive" : "secondary"} className="font-semibold">
-              ${dueAmount}
-            </Badge>
-          </div>
+          <ChevronDown className="h-6 w-6 text-gray-500" />
         </div>
-      </CardContent>
+      </Card>
 
-      <CardFooter className="px-6 py-4 bg-gray-50 border-t border-gray-100 gap-2">
-        <Button variant="outline" size="sm" className="flex-1">
-          <Pencil className="h-4 w-4 mr-2" />
-          Edit
-        </Button>
-        <Button variant="outline" size="sm" className="flex-1">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Pay
-        </Button>
-        <Button variant="outline" size="sm" className="flex-1">
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Renew
-        </Button>
-        <Button variant="outline" size="sm" className="flex-1">
-          <Receipt className="h-4 w-4 mr-2" />
-          Add Bill
-        </Button>
-      </CardFooter>
-    </Card>
-  )
-}
-
-// Example usage
-export function ExampleCard() {
-  return (
-    <div className="p-4 bg-gray-100 min-h-screen flex items-center justify-center">
-      <MemberCard
-        name="Manish Rajoriya"
-        address="Dausa"
-        id="41"
-        seatNo="1"
-        contact="8764296129"
-        joinDate="29/11/2024"
-        endDate="29/12/2024"
-        plan="m2"
-        finalAmount={0}
-        paidAmount={400}
-        dueAmount={0}
-        isExpired={true}
-      />
+      {/* Menu Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {menuItems.map((item) => (
+          <Card key={item.label} className="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 flex items-center justify-center">
+                  {item.icon}
+                </div>
+                <span className="text-base sm:text-lg">{item.label}</span>
+              </div>
+              <span className="text-sm font-semibold bg-gray-100 px-2 py-1 rounded-full">{item.count}</span>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }
+
+const menuItems = [
+  { label: "Reels", icon: <PlaySquare className="w-6 h-6 text-pink-500" />, count: 12 },
+  { label: "Messages", icon: <MessageCircle className="w-6 h-6 text-blue-500" />, count: 5 },
+  { label: "Groups", icon: <Users className="w-6 h-6 text-blue-500" />, count: 3 },
+  { label: "Friends", icon: <User className="w-6 h-6 text-blue-500" />, count: 287 },
+  { label: "Video", icon: <Video className="w-6 h-6 text-blue-500" />, count: 8 },
+  { label: "Marketplace", icon: <Home className="w-6 h-6 text-blue-500" />, count: 24 },
+  { label: "Pages", icon: <Flag className="w-6 h-6 text-orange-500" />, count: 16 },
+  { label: "Saved", icon: <Bookmark className="w-6 h-6 text-purple-500" />, count: 42 },
+  { label: "Memories", icon: <Clock className="w-6 h-6 text-blue-500" />, count: 3 },
+  { label: "Events", icon: <Calendar className="w-6 h-6 text-red-500" />, count: 2 },
+  { label: "Games", icon: <GamepadIcon className="w-6 h-6 text-blue-500" />, count: 7 },
+  { label: "Ads Manager", icon: <BarChart3 className="w-6 h-6 text-cyan-500" />, count: 1 },
+  { label: "Feeds", icon: <Newspaper className="w-6 h-6 text-orange-500" />, count: 18 },
+]
 

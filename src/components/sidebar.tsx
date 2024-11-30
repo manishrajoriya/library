@@ -50,7 +50,7 @@ export function SidebarDemo({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full bg-gray-100 dark:bg-neutral-800">
       {/* Sidebar */}
-      <Sidebar open={open} setOpen={setOpen} animate={true}>
+      <Sidebar open={open} setOpen={setOpen} animate={false}>
         <SidebarBody className="justify-between gap-10">
           <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             <Logo />

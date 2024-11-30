@@ -17,7 +17,7 @@ function DataCard({
 }: memberSchemaType) {
   return (
     <div className="m-2">
-      <div className="rounded-lg p-4 max-w-sm  shadow-custom shadow-green-100 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
+      <div className="rounded-lg sm:p-4 w-full max-w-sm sm:max-w-md shadow-custom shadow-green-100 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700">
         {/* Header Section */}
         <div className="flex justify-between">
           {/* Profile Info */}

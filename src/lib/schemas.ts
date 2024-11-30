@@ -18,10 +18,10 @@ export type AdminSchema = z.infer<typeof adminSchema>;
 export const planSchema = z.object({
   id: z.coerce.number().positive().optional(),
   name: z.string().min(1, 'Name is required'),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   duration: z.number().positive('Duration must be a positive number'),
   amount: z.number().positive('Amount must be a positive number'),
-  
+ 
 });
 
 // Define TypeScript type based on Zod schema

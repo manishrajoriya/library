@@ -71,7 +71,7 @@ export function FloatingDockDemo() {
     },
   ];
   return (
-    <div className="flex absolute bottom-8 right-4 z-40 w-full">
+    <div className="flex sm:hidden absolute bottom-8 right-4 z-40 w-full">
       <FloatingDock
         mobileClassName="absolute bottom-8 left-8 z-40" // only for demo, remove for production
         items={links}

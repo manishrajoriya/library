@@ -1,34 +1,27 @@
 
 import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+
+import { Card } from './ui/card'
+import { Plus } from 'lucide-react'
 
 
 const AddMemberCard = () =>{
     
     return(
       <div>
-        <div className="grid grid-cols-1 gap-4 mb-6">
-    {/* <!-- Card items --> */}
-    <Link href={'/addmember'}>
-        <button title='Add Student' >
-        <div className="flex items-center p-4 bg-white rounded-lg shadow">
-            <Image width={6} height={6} src="/add.png" alt="Reels Icon" className="w-6 h-6 mr-2" />
-            <span>Add Student</span>
+      <Card className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+            <Plus className="h-6 w-6 text-gray-500" />
+          </div>
+          <span className="text-lg">Add Member</span>
         </div>
-       </button>
-     </Link>
-    {/* <div className="flex items-center p-4 bg-white rounded-lg shadow">
-      <img src="add.png" alt="Reels Icon" className="w-6 h-6 mr-2" />
-      <span>Add Student</span>
-    </div> */}
-    
-    
-   
-    {/* <!-- Repeat similar structure for other menu items --> */}
-  </div>
+       </Card>
       </div>
+      
     )
 }
 
 export default AddMemberCard
+
+    
