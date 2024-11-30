@@ -21,9 +21,11 @@ export default function LandingPage() {
         <section className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">Manage Your Studies with Ease</h1>
           <p className="text-xl text-white mb-8">Organize, track, and excel in your academic journey</p>
-          <Button size="lg" style={{ backgroundColor: 'rgb(255, 193, 7)', color: 'rgb(0, 0, 0)' }} className="hover:opacity-90">
+          <Link href="/User">
+          <Button  size="lg" style={{ backgroundColor: 'rgb(255, 193, 7)', color: 'rgb(0, 0, 0)' }} className="hover:opacity-90">
             Get Started <ArrowRight className="ml-2" />
           </Button>
+          </Link>
         </section>
 
         <section id="features" className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
@@ -56,9 +58,11 @@ export default function LandingPage() {
         <section className="text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Boost Your Academic Success?</h2>
           <p className="text-xl text-white mb-8">Join thousands of students already using StudyBuddy</p>
+          <Link href="/sign-up">
           <Button size="lg" style={{ backgroundColor: 'rgb(0, 230, 118)', color: 'rgb(0, 0, 0)' }} className="hover:opacity-90">
             Sign Up Now
           </Button>
+          </Link>
         </section>
       </main>
 

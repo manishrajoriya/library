@@ -8,7 +8,7 @@ import {  planSchema } from '@/lib/schemas';
 import { auth } from '@clerk/nextjs/server'
 import { Prisma } from "@prisma/client";
 import { v2 as cloudinary } from 'cloudinary';
-
+import { currentUser } from "@clerk/nextjs/server";
 
 
 
@@ -57,8 +57,8 @@ import { v2 as cloudinary } from 'cloudinary';
 export async function createMember({ data }: { data: z.infer<typeof memberSchema> }) {
   try {
     // Authenticate the user
-    const { userId } = await auth();
-    if (!userId) {
+    const User =await currentUser()
+    if (!User?.id) {
       return {
         success: false,
         message: "User not authenticated",
@@ -66,7 +66,7 @@ export async function createMember({ data }: { data: z.infer<typeof memberSchema
     }
     // Check if the admin exists
     const admin = await prisma.admin.findUnique({
-      where: { id: userId },
+      where: { id: User.id },
     });
 
     if (!admin) {
@@ -148,11 +148,36 @@ export async function createMember({ data }: { data: z.infer<typeof memberSchema
 
 export async function deleteMember({ id }: { id: number }) {
   try {
-    const deletedMember = await prisma.member.delete({
-      where: { id },
+    const User =await currentUser()
+    if (!User?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
+
+    const admin = await prisma.admin.findUnique({
+      where: { id: User.id },
     });
 
-    return deletedMember;
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin not found",
+      }
+    }
+    const deletedMember = await prisma.member.delete({
+      where: { 
+        adminId: User.id,
+        id
+       },
+    });
+
+    return {
+      success: true,
+      member: deletedMember,
+      message: "Member deleted successfully",
+    };
   } catch (error) {
     console.error("Failed to delete member:", error);
     throw error;
@@ -202,8 +227,9 @@ export async function getAllMembers() {
   try {
     const ITEM_PER_PAGE = 10
     
-    const {userId} =await auth()
-    if (!userId) {
+    
+    const User =await currentUser()
+    if (!User?.id) {
       return{
         success: false,
         message: "User not authenticated"
@@ -212,7 +238,7 @@ export async function getAllMembers() {
     const members = await prisma.member.findMany({
       
       where: {
-        adminId: userId
+        adminId: User.id
       },
       include: {
         plan: true
@@ -356,8 +382,8 @@ export async function paidAmountCount() {
 
 export async function getSeatNumber() {
   try {
-    const {userId} =await auth()
-    if (!userId) {
+    const User =await currentUser()
+    if (!User?.id) {
       return {
         success: false,
         message: "User not authenticated",
@@ -366,7 +392,7 @@ export async function getSeatNumber() {
 
     const admin = await prisma.admin.findUnique({
       where: {
-        id: userId
+        id: User.id
       }
     })
 
@@ -440,8 +466,8 @@ export async function createPlan({data}: {data: z.infer<typeof planSchema>}) {
 
 export async function getAllPlans() {
   try {
-    const {userId} =await auth()
-    if (!userId) {
+    const User =await currentUser()
+    if (!User?.id) {
       return {
         success: false,
         message: "User not authenticated",
@@ -449,7 +475,7 @@ export async function getAllPlans() {
     }
     const plans = await prisma.plan.findMany({
       where: {
-        adminId: userId
+        adminId: User.id
       }
     });
     
@@ -511,8 +537,8 @@ export async function updatePlan({
 
 export async function getPlanAmount({id}: {id: number}) {
   try {
-    const {userId} =await auth()
-    if (!userId) {
+    const User =await currentUser()
+    if (!User?.id) {
       return {
         success: false,
         message: "User not authenticated",
@@ -521,7 +547,7 @@ export async function getPlanAmount({id}: {id: number}) {
 
     const admin = await prisma.admin.findUnique({
       where: {
-        id: userId
+        id: User.id
       }
     })
 
@@ -534,7 +560,7 @@ export async function getPlanAmount({id}: {id: number}) {
 
     const planAmount = await prisma.plan.findUnique({
       where: {
-        adminId: userId,
+        adminId: User.id,
         id
       },
       select: {
