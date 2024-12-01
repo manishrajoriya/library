@@ -20,6 +20,14 @@ import {
 } from "@/lib/action";
 import { Card } from "./ui/card";
 
+// Add a helper function at the top of the file
+function formatCount(count: number | { success: boolean; message: string }) {
+  if (typeof count === 'number') {
+    return count;
+  }
+  return 0; // Return 0 or some default value if the count is an error object
+}
+
 export async function Cards() {
   // Fetching all counts
   const [
@@ -45,52 +53,49 @@ export async function Cards() {
     {
       logo: <Users className="text-blue-500" />,
       title: "Total Members",
-      count: membersCount,
+      count: formatCount(membersCount),
       className: "bg-blue-50/50",
     },
     {
       logo: <UserCheck className="text-green-500" />,
       title: "Live Members",
-      count: liveMembers,
+      count: formatCount(liveMembers),
       className: "bg-green-50/50",
     },
-     {
+    {
       logo: <UserX className="text-red-500" />,
       title: "Inactive Members",
-      count: inactiveMembers,
+      count: formatCount(inactiveMembers),
       className: "bg-red-50/50",
     },
     {
       logo: <CreditCard className="text-indigo-500" />,
       title: "Total Amount",
-      count: totalAmount,
+      count: formatCount(totalAmount),
       className: "bg-indigo-50/50",
     },
     {
       logo: <DollarSign className="text-purple-500" />,
       title: "Paid Amount",
-      count: paidAmount,
+      count: formatCount(paidAmount),
       className: "bg-purple-50/50",
     },
-    
     {
       logo: <Clock className="text-orange-500" />,
       title: "Due Amount",
-      count: dueAmount,
+      count: formatCount(dueAmount),
       className: "bg-orange-50/50",
     },
-    
-   
     {
       logo: <TrendingUp className="text-emerald-500" />,
       title: "Total Expense",
-      count: expenses,
+      count: formatCount(expenses),
       className: "bg-emerald-50/50",
     },
     {
       logo: <TrendingDown className="text-rose-500" />,
       title: "P&L",
-      count: paidAmount - expenses,
+      count: formatCount(paidAmount) - formatCount(expenses),
       className: "bg-rose-50/50",
     },
   ];

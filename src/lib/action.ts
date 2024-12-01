@@ -1,4 +1,3 @@
-
 "use server"
 import { expenseSchema, memberSchema } from "@/lib/schemas";
 import { z } from "zod";
@@ -192,12 +191,31 @@ export async function updateMember({
   data: z.infer<typeof memberSchema>;
 }) {
   try {
+     const User =await currentUser()
+    if (!User?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      }
+    }
+
+    const admin = await prisma.admin.findUnique({
+      where: { id: User.id },
+    });
+
+    if (!admin) {
+      return {
+        success: false,
+        message: "Admin not found",
+      }
+    }
+    
     // Validate the data using the zod schema if needed
     memberSchema.parse(data);
 
     // Update the member data in the database using Prisma
     const updatedMember = await prisma.member.update({
-      where: { id },
+      where: { adminId: User.id, id },
       data: {
         name: data.name,
         address: data?.address,
@@ -266,17 +284,26 @@ export async function getAllMembers() {
 
 export async function countMembers() {
   try {
-    const {userId, redirectToSignIn} =await auth()
-    if (!userId) return redirectToSignIn()
+    const User = await currentUser()
+    if (!User?.id) {
+      return {
+        success: false,
+        message: "User not authenticated"
+      }
+    }
+    
     const membersCount = await prisma.member.count({
       where: {
-        adminId: userId
+        adminId: User.id
       }
     });
     return membersCount;
   } catch (error) {
     console.error('Error counting members:', error);
-    throw new Error('Failed to count members');
+    return {
+      success: false,
+      message: 'Failed to count members'
+    };
   }
 }
 
